@@ -3,13 +3,13 @@
  */
 
 /*$(function () {
-    $("#main_wrap_left a").draggable({
+    $(".left_block").draggable({
         appendTo: "#container",
         helper: "clone",
         zIndex: 10000,
         opacity: 0.8,
         start: function (event, ui) {
-            $("#container").animate({"background-color": "salmon"}, 500);
+            //$("#container").animate({"background-color": "salmon"}, 500);
         },
         drag: function (event , ui) {
             var t = event.pageY,
@@ -17,16 +17,25 @@
                 ss = "top: " + t + ", left: " + l;
 
             $("#panel").html(ss);
-            $("#container").animate({"background-color": "salmon !important"}, 100);
+            //$("#container").animate({"background-color": "salmon !important"}, 100);
         }
     });
     $("#container").droppable({
-        activeClass: "ui-state-default",
+        //activeClass: "ui-state-default",
         hoverClass: "ui-state-hover",
-        accept: "#main_wrap_left a",
-        drop: function( event, ui ) {
-            console.log($(this));
-            $("#container").append($(this));
+        accept: ".left_block",
+        drop: function(event, ui) {
+            var $Item =  ui.draggable;
+            var $itemClone = $Item.clone();
+
+            var t = event.offset().top;
+            var l = event.offset().left;
+            console.log(t, "  ", l);
+            $("#container").append($itemClone);
+            $itemClone.css({
+                "top": t,
+                "left": l
+            }).fadeIn(100);
         }
     });
 });*/
@@ -119,13 +128,73 @@ jsPlumb.ready(function () {
      * 要实现元素的拖动， 必须该元素的定位是absolute, 并且其父元素是relative定位
      * 不谈， 即使设置了draggable方法， 元素也是没有拖动反应的
      * */
+    /*var leftBlocks = jsPlumb.getSelector(".left_block");
     instance.draggable(leftBlocks, {
         "containment": "#container"
     });
-    jsPlumb.fire("jsPlumbDemoLoaded", instance);
-    var leftBlocks = jsPlumb.getSelector(".left_block");
+    instance.droppable(container, {
+        canDrop: true,
+        drop: function (iObj) {
 
+        }
+    })*/
     /**
      * Echo Added -- end -- 2015.12.29
      * */
-})
+
+
+
+
+    /**
+     * Echo Added -- begin -- 2015.12.29 : add Jquery ui method into jsPlumb.ready
+     * */
+
+    $(".left_block").draggable({
+        appendTo: "#container",
+        helper: "clone",
+        zIndex: 10000,
+        opacity: 0.8,
+        start: function (event, ui) {
+        },
+        drag: function (event , ui) {
+            var t = event.pageY,
+                l = event.pageX,
+                ss = "top: " + t + ", left: " + l;
+            $("#panel").html(ss);
+        }
+    });
+    $("#container").droppable({
+        hoverClass: "hover-class-test",
+        accept: ".left_block",
+        drop: function(event, ui) {
+            var $Item =  ui.draggable;
+            var $itemClone = $Item.clone();
+
+            var t = event.pageY - event.offsetY - 15;
+            var l = event.pageX - event.offsetX - $(".main_wrap_left").width();
+            $("#container").append($itemClone);
+            $itemClone.css({
+                "top": t,
+                "left": l
+            }).fadeIn(100);
+
+            instance.draggable($itemClone, {
+                'containment': 'parent'
+            });
+
+        }
+    });
+
+
+
+    /**
+     * Echo Added -- end -- 2015.12.29 : add Jquery ui method into jsPlumb.ready
+     * */
+
+
+
+
+
+    jsPlumb.fire("jsPlumbDemoLoaded", instance);
+
+});

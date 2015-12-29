@@ -128,28 +128,12 @@ jsPlumb.ready(function () {
      * 要实现元素的拖动， 必须该元素的定位是absolute, 并且其父元素是relative定位
      * 不谈， 即使设置了draggable方法， 元素也是没有拖动反应的
      * */
-    /*var leftBlocks = jsPlumb.getSelector(".left_block");
-    instance.draggable(leftBlocks, {
-        "containment": "#container"
-    });
-    instance.droppable(container, {
-        canDrop: true,
-        drop: function (iObj) {
 
-        }
-    })*/
     /**
      * Echo Added -- end -- 2015.12.29
      * */
 
-
-
-
-    /**
-     * Echo Added -- begin -- 2015.12.29 : add Jquery ui method into jsPlumb.ready
-     * */
-
-    $(".left_block").draggable({
+    $(".main_wrap_left .left_block").draggable({
         appendTo: "#container",
         helper: "clone",
         zIndex: 10000,
@@ -170,7 +154,7 @@ jsPlumb.ready(function () {
             var $Item =  ui.draggable;
             var $itemClone = $Item.clone();
 
-            var t = event.pageY - event.offsetY - 15;
+            var t = event.pageY - event.offsetY - 12;
             var l = event.pageX - event.offsetX - $(".main_wrap_left").width();
             $("#container").append($itemClone);
             $itemClone.css({
@@ -184,6 +168,13 @@ jsPlumb.ready(function () {
 
         }
     });
+
+
+    /**
+     * Echo Added -- begin -- 2015.12.29 : add Jquery ui method into jsPlumb.ready
+     * */
+
+
 
 
 

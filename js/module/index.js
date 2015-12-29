@@ -33,9 +33,6 @@
 
 jsPlumb.ready(function () {
 
-    var left_instance = jsPlumb.getInstance("main_wrap_left");
-    left_instance.draggable("main_wrap_left a");
-
     var container = document.getElementById("container");
 
     // setup some defaults for jsPlumb.
@@ -50,7 +47,7 @@ jsPlumb.ready(function () {
                 length: 14,
                 foldback: 0.8
             } ],
-            [ "Label", { label: "FOO", id: "label", cssClass: "aLabel" }]
+            /*[ "Label", { label: "FOO", id: "label", cssClass: "aLabel" }]*/
         ],
         Container: "container"
     });
@@ -66,6 +63,10 @@ jsPlumb.ready(function () {
             "containment": "parent"
         });
 
+        /*Echo Added*/
+        instance.setSourceEnabled(el);
+
+
         instance.makeSource(el, {
             filter: ".ep",
             anchor: "Continuous",
@@ -74,7 +75,7 @@ jsPlumb.ready(function () {
             extract:{
                 "action":"the-action"
             },
-            maxConnections: 2,
+            //maxConnections: 2,
             onMaxConnections: function (info, e) {
                 alert("Maximum connections (" + info.maxConnections + ") reached");
             }
@@ -111,7 +112,20 @@ jsPlumb.ready(function () {
         newNode(e.offsetX, e.offsetY);
     });
 
+
+
+    /**
+     * Echo Added -- begin -- 2015.12.29
+     * 要实现元素的拖动， 必须该元素的定位是absolute, 并且其父元素是relative定位
+     * 不谈， 即使设置了draggable方法， 元素也是没有拖动反应的
+     * */
+    instance.draggable(leftBlocks, {
+        "containment": "#container"
+    });
     jsPlumb.fire("jsPlumbDemoLoaded", instance);
+    var leftBlocks = jsPlumb.getSelector(".left_block");
 
-
+    /**
+     * Echo Added -- end -- 2015.12.29
+     * */
 })

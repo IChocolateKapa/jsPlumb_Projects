@@ -51,7 +51,7 @@ jsPlumb.ready(function () {
         HoverPaintStyle: {strokeStyle: "#1e8151", lineWidth: 2 },
         ConnectionOverlays: [
             [ "Arrow", {
-                location: 1,
+                location: .9,
                 id: "arrow",
                 length: 14,
                 foldback: 0.8
@@ -96,7 +96,8 @@ jsPlumb.ready(function () {
             allowLoopback: true
         });
 
-        // this is not part of the core demo functionality; it is a means for the Toolkit edition's wrapped
+        // this is not part of the core demo functionality;
+        // it is a means for the Toolkit edition's wrapped
         // version of this demo to find out about new nodes being added.
         //
         instance.fire("jsPlumbDemoNodeAdded", el);
@@ -133,6 +134,12 @@ jsPlumb.ready(function () {
      * Echo Added -- end -- 2015.12.29
      * */
 
+    /**
+     * Echo Added -- begin -- 2015.12.29 : add Jquery ui method into jsPlumb.ready
+     * */
+
+
+
     $(".main_wrap_left .left_block").draggable({
         appendTo: "#container",
         helper: "clone",
@@ -154,7 +161,7 @@ jsPlumb.ready(function () {
             var $Item =  ui.draggable;
             var $itemClone = $Item.clone();
 
-            var t = event.pageY - event.offsetY - 12;
+            var t = event.pageY - event.offsetY;
             var l = event.pageX - event.offsetX - $(".main_wrap_left").width();
             $("#container").append($itemClone);
             $itemClone.css({
@@ -162,19 +169,10 @@ jsPlumb.ready(function () {
                 "left": l
             }).fadeIn(100);
 
-            instance.draggable($itemClone, {
-                'containment': 'parent'
-            });
+            initNode($itemClone);
 
         }
     });
-
-
-    /**
-     * Echo Added -- begin -- 2015.12.29 : add Jquery ui method into jsPlumb.ready
-     * */
-
-
 
 
 

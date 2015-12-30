@@ -26,7 +26,6 @@
 .w:hover {
     background-color: #5c96bc;
     color: white;
-
 }
 
 .aLabel {
@@ -56,7 +55,7 @@
     width: 1em;
     height: 1em;
     border-radius: 50%;
-    background-color: orange;
+    background-color: #ff4424;
     cursor: pointer;
     box-shadow: 0 0 9px 2px rgba(50, 132, 167, .4);
     -webkit-transition: -webkit-box-shadow 0.25s ease-in;

@@ -40,6 +40,7 @@
     });
 });*/
 
+
 jsPlumb.ready(function () {
 
     var container = document.getElementById("container");
@@ -73,7 +74,7 @@ jsPlumb.ready(function () {
         });
 
         /*Echo Added*/
-        instance.setSourceEnabled(el);
+        //instance.setSourceEnabled(el);
 
 
         instance.makeSource(el, {
@@ -81,9 +82,14 @@ jsPlumb.ready(function () {
             anchor: "Continuous",
             connectorStyle: { strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "transparent", outlineWidth: 4 },
             connectionType:"basic",
+            endpoint:["Dot", {radius: 3, cssClass:"small-blue"}],
             extract:{
                 "action":"the-action"
             },
+            connectionDetached: function () {
+                alert("hahha")
+            },
+
             //maxConnections: 2,
             onMaxConnections: function (info, e) {
                 alert("Maximum connections (" + info.maxConnections + ") reached");
@@ -93,8 +99,13 @@ jsPlumb.ready(function () {
         instance.makeTarget(el, {
             dropOptions: { hoverClass: "dragHover" },
             anchor: "Continuous",
-            allowLoopback: true
+            allowLoopback: true,
+            connectionDetached: function () {
+                alert("target")
+            },
+            endpoint:["Dot", {radius: 3, cssClass:"small-blue"}]
         });
+
 
         // this is not part of the core demo functionality;
         // it is a means for the Toolkit edition's wrapped
@@ -124,6 +135,7 @@ jsPlumb.ready(function () {
 
 
 
+
     /**
      * Echo Added -- begin -- 2015.12.29
      * 要实现元素的拖动， 必须该元素的定位是absolute, 并且其父元素是relative定位
@@ -131,14 +143,8 @@ jsPlumb.ready(function () {
      * */
 
     /**
-     * Echo Added -- end -- 2015.12.29
-     * */
-
-    /**
      * Echo Added -- begin -- 2015.12.29 : add Jquery ui method into jsPlumb.ready
      * */
-
-
 
     $(".main_wrap_left .left_block").draggable({
         appendTo: "#container",
@@ -158,22 +164,18 @@ jsPlumb.ready(function () {
         hoverClass: "hover-class-test",
         accept: ".left_block",
         drop: function(event, ui) {
+
             var $Item =  ui.draggable;
             var $itemClone = $Item.clone();
 
-            var t = event.pageY - event.offsetY;
-            var l = event.pageX - event.offsetX - $(".main_wrap_left").width();
-            $("#container").append($itemClone);
-            $itemClone.css({
-                "top": t,
-                "left": l
-            }).fadeIn(100);
+            var t = event.pageY - event.offsetY,
+                l = event.pageX - event.offsetX - $(".main_wrap_left").width();
+
+            $itemClone.css({"top": t, "left": l}).appendTo($("#container"));
 
             initNode($itemClone);
-
         }
     });
-
 
 
     /**
@@ -183,7 +185,105 @@ jsPlumb.ready(function () {
 
 
 
+    /**
+     * Set Zoom -- begin 2015.12.30
+     * */
+
+    window.setZoom = function(zoom, instance, transformOrigin, el) {
+        transformOrigin = transformOrigin || [ 0.5, 0.5 ];
+        instance = instance || jsPlumb;
+        el = el || instance.getContainer();
+        var p = [ "webkit", "moz", "ms", "o" ],
+            s = "scale(" + zoom + ")",
+            oString = (transformOrigin[0] * 100) + "% " + (transformOrigin[1] * 100) + "%";
+
+        for (var i = 0; i < p.length; i++) {
+            el.style[p[i] + "Transform"] = s;
+            el.style[p[i] + "TransformOrigin"] = oString;
+        }
+
+        el.style["transform"] = s;
+        el.style["transformOrigin"] = oString;
+
+        instance.setZoom(zoom);
+    };
+
+    /**
+     * Set Zoom -- begin 2015.12.30
+     * */
+
+
+
+
+
+    /**
+     * save this gragh 2015.12.30. -- begin --
+     * */
+
+    $("#save_gragh").click(function () {
+
+
+        /*获取所有节点*/
+        var nodeList = jsPlumb.getSelector(".w");
+        console.log("nodeList: ", nodeList);
+        for (var i = 0; i < nodeList.length; i++) {
+            var elHeight = nodeList[i].offsetHeight,
+                elWidth = nodeList[i].offsetWidth,
+                elTop = nodeList[i].offsetTop,
+                elLeft = nodeList[i].offsetLeft,
+                id = nodeList[i].id,
+                text = nodeList[i].textContent,
+                elProps = {};
+
+            elProps = {
+                width: elWidth,
+                height: elHeight,
+                top: elTop,
+                left: elLeft,
+                id: id,
+                text: text
+            };
+            nodeBasket.addItem(nodeList[i]);
+            //nodeBasket.addItem(elProps);
+        }
+        console.log(nodeBasket.getItems());
+
+
+
+        //获取所有连接
+        var connectionList = instance.getConnections();
+        for (var j = 0; j < connectionList.length; j++) {
+            /*var conn = {
+                source: connectionList[i].source.id,
+                target: connectionList[i].target.id
+            }*/
+            connectionBasket.addItem(connectionList[j]);
+            //connectionBasket.addItem(conn);
+        }
+        console.log(connectionBasket.getItems());
+
+
+        /*暂时先清空*/
+        var sampleHtml = '<div class="left_block" id="sample">'
+                            + '<a href="javascript:void(0)">Sample</a>'
+                        + '</div>';
+
+        $(sampleHtml).appendTo($(".main_wrap_left")).css({'top': 200, 'left': 0});
+        $("#container").empty();
+    });
+
+    /**
+     * save this gragh 2015.12.30. -- end --
+     * */
+
+
+
+
+
+
 
     jsPlumb.fire("jsPlumbDemoLoaded", instance);
+
+
 
 });

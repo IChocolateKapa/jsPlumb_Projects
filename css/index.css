@@ -78,13 +78,23 @@ div[class^='main_wrap_']{
 }
 
 #panel{
-    color: salmon;
+    color: #fff;
     font-weight: 400;
-    line-height: 30px;
+    line-height: 50px;
     text-align: center;
+    width: 100px;
 }
 .hover-class-test{
     box-shadow: 0 0 15px 5px rgba(50, 132, 167, .4);
     /*border: 1px solid #3284a7;*/
     background-color: white !important;
+}
+.footer{
+    height: 100px;
+    background: #EC5A4B;
+}
+.button-group{
+    display: inline-block;
+    margin-left: 50%;
+    width: calc(100% - 105px);
 }

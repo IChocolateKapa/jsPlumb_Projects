@@ -21,6 +21,7 @@
     -webkit-transition: background-color 0.25s ease-in;
     -moz-transition: background-color 0.25s ease-in;
     transition: background-color 0.25s ease-in;
+    text-align: center;
 }
 
 .w:hover {
@@ -48,12 +49,13 @@
     cursor: pointer;
 }
 
-.ep {
+/*显示展现连接拖动起点*/
+.ep2{
     position: absolute;
     bottom: 37%;
     right: 5px;
-    width: 1em;
-    height: 1em;
+    width: 2em;
+    height: 2em;
     border-radius: 50%;
     background-color: #ff4424;
     cursor: pointer;
@@ -62,10 +64,18 @@
     -moz-transition: -moz-box-shadow 0.25s ease-in;
     transition: box-shadow 0.25s ease-in;
 }
-
-.ep:hover {
+.ep2:hover {
     box-shadow: 0 0 9px 2px rgba(50, 132, 167, .4);
 }
+
+/*没有显示展现连接拖动起点的样式*/
+.ep {
+    display: inline-block;
+    padding: 2px;
+    background-color: transparent;
+    cursor: pointer;
+}
+
 
 .statemachine-demo .jsplumb-endpoint {
     z-index: 3;

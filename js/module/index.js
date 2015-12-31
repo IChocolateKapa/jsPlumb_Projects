@@ -155,13 +155,6 @@ jsPlumb.ready(function () {
     };
 
 
-    jsPlumb.on(container, "dblclick", function(e) {
-        newNode(e.offsetX, e.offsetY);
-    });
-
-
-
-
     /**
      * Echo Added -- begin -- 2015.12.29
      * 要实现元素的拖动， 必须该元素的定位是absolute, 并且其父元素是relative定位
@@ -305,24 +298,44 @@ jsPlumb.ready(function () {
 
     // bind click listener; delete connections on click
     instance.bind("click", function (conn) {
-        //instance.detach(conn);
-        //点击连接事件
-    });
-    /**
-     * 双击删除连接
-     * */
-    instance.bind("dblclick", function (conn) {
         /*删除连接*/
         instance.detach(conn);
         var event = window.event;
         event.preventDefault();
         event.stopPropagation();
     });
+    /**
+     * 双击删除连接， 但是这样会触发双击 增加节点 的事件， 即使阻止冒泡，也没有解决
+     * 暂时解决办法是： 给连接绑单击事件， 不与最上层容器的双击事件冒泡冲突
+     * 故下面这段先注释掉
+     * */
+    /*instance.bind("dblclick", function (conn) {
+        /!*删除连接*!/
+        instance.detach(conn);
+        var event = window.event;
+        event.preventDefault();
+        event.stopPropagation();
+    });*/
+
     // bind beforeDetach interceptor: will be fired when the click handler above calls detach, and the user
     // will be prompted to confirm deletion.
     instance.bind("beforeDetach", function (conn) {
-        return confirm("Delete connection?");
+        var ret = confirm("Delete connection?");
+
+        var event = window.event;
+        event.preventDefault();
+        event.stopPropagation();
+
+        return ret;
     });
+
+
+    /*双击添加新节点*/
+    jsPlumb.on(container, "dblclick", function(e) {
+        newNode(e.offsetX, e.offsetY);
+    });
+
+
 
 
 

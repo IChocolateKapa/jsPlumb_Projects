@@ -76,21 +76,27 @@ jsPlumb.ready(function () {
         /*Echo Added*/
         //instance.setSourceEnabled(el);
 
+        /**
+         * let's take a quick look at the parameter 'filter', here is its definition:
+         * Specifying drag source area
+         * Configuring an element to be an entire Connection source using makeSource means that the element cannot itself be draggable.
+         * There would be no way for jsPlumb to distinguish between the user attempting to drag the element and attempting to drag a Connection from the element.
+         * To handle this there is the filter parameter.
+         *
+         * To sum up, 如果一个节点作为连接起点，想要从任意地方都能拖出连接， 是不可能的，要么，这个source节点本身不可拖动，
+         * 要么， 通过filter 属性指定 从这个节点里某个位置拖连接线。
+         * */
 
         instance.makeSource(el, {
-            filter: ".ep",
+            filter: ".ep",//从epdiv中作为拖动连接起点
             anchor: "Continuous",
             connectorStyle: { strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "transparent", outlineWidth: 4 },
             connectionType:"basic",
-            endpoint:["Dot", {radius: 3, cssClass:"small-blue"}],
+            //endpoint:["Dot", {radius: 3, cssClass:"small-blue"}],
             extract:{
                 "action":"the-action"
             },
-            connectionDetached: function () {
-                alert("hahha")
-            },
-
-            //maxConnections: 2,
+            maxConnections: -1,
             onMaxConnections: function (info, e) {
                 alert("Maximum connections (" + info.maxConnections + ") reached");
             }
@@ -100,17 +106,36 @@ jsPlumb.ready(function () {
             dropOptions: { hoverClass: "dragHover" },
             anchor: "Continuous",
             allowLoopback: true,
-            connectionDetached: function () {
-                alert("target")
-            },
             endpoint:["Dot", {radius: 3, cssClass:"small-blue"}]
         });
 
 
+        /**
+         * 给新添加的节点绑定 点击 事件
+         * */
+        instance.on(el, "click", function (event) {
+            //注意在建立连接完成时也会触发这个事件
+            console.log(event.target);
+        });
+        /**
+         * 给新添加的节点添加绑定事件
+         * */
+        instance.on(el, "dblclick", function (event) {
+            //注意在建立连接完成时也会触发这个事件
+            console.log(event.target);
+            var ret = confirm("确实要删除这个节点吗？");
+            if (ret) {
+                /*节点删除*/
+                instance.remove(el);
+            }
+            /*阻止冒泡和默认行为*/
+            event.stopPropagation();
+            event.preventDefault();
+        });
+
         // this is not part of the core demo functionality;
         // it is a means for the Toolkit edition's wrapped
         // version of this demo to find out about new nodes being added.
-        //
         instance.fire("jsPlumbDemoNodeAdded", el);
     };
 
@@ -120,7 +145,8 @@ jsPlumb.ready(function () {
         var id = jsPlumbUtil.uuid();
         d.className = "w";
         d.id = id;
-        d.innerHTML = id.substring(0, 7) + "<div class=\"ep\"></div>";
+        d.innerHTML =  "<div class=\"ep\">" + id.substring(0, 7) + "</div>";
+        //d.innerHTML = id.substring(0, 7) + "<div class=\"ep\"></div>";
         d.style.left = x + "px";
         d.style.top = y + "px";
         instance.getContainer().appendChild(d);
@@ -176,7 +202,6 @@ jsPlumb.ready(function () {
             initNode($itemClone);
         }
     });
-
 
     /**
      * Echo Added -- end -- 2015.12.29 : add Jquery ui method into jsPlumb.ready
@@ -280,8 +305,26 @@ jsPlumb.ready(function () {
 
     // bind click listener; delete connections on click
     instance.bind("click", function (conn) {
-        instance.detach(conn);
+        //instance.detach(conn);
+        //点击连接事件
     });
+    /**
+     * 双击删除连接
+     * */
+    instance.bind("dblclick", function (conn) {
+        /*删除连接*/
+        instance.detach(conn);
+        var event = window.event;
+        event.preventDefault();
+        event.stopPropagation();
+    });
+    // bind beforeDetach interceptor: will be fired when the click handler above calls detach, and the user
+    // will be prompted to confirm deletion.
+    instance.bind("beforeDetach", function (conn) {
+        return confirm("Delete connection?");
+    });
+
+
 
     //设置连接完成时，响应的事件
     /*instance.bind("beforeDrop", function (conn) {
@@ -294,17 +337,10 @@ jsPlumb.ready(function () {
         console.log("drag Done!");
         console.log("conn ： ", conn);
 
-        //var event = window.event;
-        //event.preventDefault();
-        //event.stopPropagation();
+        var event = window.event;
+        event.preventDefault();
+        event.stopPropagation();
     });
-
-    // bind beforeDetach interceptor: will be fired when the click handler above calls detach, and the user
-    // will be prompted to confirm deletion.
-    instance.bind("beforeDetach", function (conn) {
-        return confirm("Delete connection?");
-    });
-
 
 
 

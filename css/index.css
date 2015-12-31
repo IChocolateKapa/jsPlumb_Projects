@@ -95,6 +95,6 @@ div[class^='main_wrap_']{
 }
 .button-group{
     display: inline-block;
-    margin-left: 50%;
-    width: calc(100% - 105px);
+    margin-left: 300px;
+    width: 400px;
 }

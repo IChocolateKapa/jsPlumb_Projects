@@ -278,6 +278,32 @@ jsPlumb.ready(function () {
 
 
 
+    // bind click listener; delete connections on click
+    instance.bind("click", function (conn) {
+        instance.detach(conn);
+    });
+
+    //设置连接完成时，响应的事件
+    /*instance.bind("beforeDrop", function (conn) {
+        //alert("hahah");
+    });*/
+
+    //设置连接完成时，响应的事件
+    instance.bind("connectionDragStop", function (conn) {
+        //conn是当前的具体连接， 能够获取连接的source target
+        console.log("drag Done!");
+        console.log("conn ： ", conn);
+
+        //var event = window.event;
+        //event.preventDefault();
+        //event.stopPropagation();
+    });
+
+    // bind beforeDetach interceptor: will be fired when the click handler above calls detach, and the user
+    // will be prompted to confirm deletion.
+    instance.bind("beforeDetach", function (conn) {
+        return confirm("Delete connection?");
+    });
 
 
 

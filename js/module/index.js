@@ -321,23 +321,27 @@ jsPlumb.ready(function () {
             var newCreated = newNode(nodes[i].left, nodes[i].top, nodes[i].text, nodes[i].id, nodes[i].width, nodes[i].height);
             initNode(newCreated);
         }
+        console.log("lists.length : ", lists.length);
         for (var j = 0; j < lists.length; j++) {
-            jsPlumb.connect({
+            instance.connect({
                 source: lists[j].source,
                 target: lists[j].target,
-                newConnection:true,
+                newConnection: true,
                 paintStyle: { strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "transparent", outlineWidth: 4 },
-                endpoint:["Dot", {radius: 3, cssClass:"small-blue"}],
+                endpoint: ["Dot", {radius: 3, cssClass:"small-blue"}],
                 anchor: "Continuous",
+                connector:"Bezier",
                 overlays: [
-                    [ "Arrow", {
+                    ["Arrow", {
                         location: .9,
                         id: "arrow",
                         length: 14,
                         foldback: 0.8
-                    }],
-                ]
+                    }]
+                ],
             });
+
+            //jsPlumb.connect(lists[j]);
         }
 
 

@@ -40,13 +40,13 @@
     });
 });*/
 
-
+var instance;
 jsPlumb.ready(function () {
 
     var container = document.getElementById("container");
 
     // setup some defaults for jsPlumb.
-    var instance = jsPlumb.getInstance({
+    instance = jsPlumb.getInstance({
         Endpoint: ["Dot", {radius: 2}],
         Connector:"Bezier",//StateMachine
         HoverPaintStyle: {strokeStyle: "#1e8151", lineWidth: 2 },
@@ -90,7 +90,7 @@ jsPlumb.ready(function () {
         instance.makeSource(el, {
             filter: ".stateName",//从epdiv中作为拖动连接起点
             anchor: "Continuous",
-            connectorStyle: { strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "transparent", outlineWidth: 4 },
+            connectorStyle: {strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "transparent", outlineWidth: 4},
             connectionType:"basic",
             //endpoint:["Dot", {radius: 3, cssClass:"small-blue"}],
             extract:{
@@ -106,7 +106,7 @@ jsPlumb.ready(function () {
             dropOptions: { hoverClass: "dragHover" },
             anchor: "Continuous",
             allowLoopback: false,//true
-            endpoint:["Dot", {radius: 3, cssClass:"small-blue"}]
+            endpoint: ["Dot", {radius: 3, cssClass:"small-blue"}]
         });
 
 
@@ -320,6 +320,14 @@ jsPlumb.ready(function () {
         //instance.repaintEverything();
         //instance.clear();
         //instance.deleteEveryEndpoint();
+
+        //however, it's useless.....
+        var allNodes = instance.getSelector(".w"),
+            leng = allNodes.length;
+        for (var k = 0; k < leng; k++) {
+            instance.remove(allNodes[k]);
+        }
+
         $("#container").empty();
         console.log("in saving lists.length : ", connectionBasket.getItems().length);
     });
@@ -330,6 +338,7 @@ jsPlumb.ready(function () {
         var nodes = nodeBasket.getItems(),
             links = connectionBasket.getItems();
 
+        console.log("nodes.length : ", nodes.length);
         for (var i = 0; i < nodes.length; i++){
             var newCreated = newNode(nodes[i].left, nodes[i].top, nodes[i].text, nodes[i].id, nodes[i].width, nodes[i].height);
             initNode(newCreated);

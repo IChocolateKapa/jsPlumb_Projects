@@ -112,3 +112,16 @@
 }
 
 path, .jsplumb-endpoint { cursor:pointer; }
+
+.stateName {
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    outline: none;
+    line-height: 30px;
+    color: #333;
+    font-weight: bolder;
+    font-size: 14px;
+    border-radius: 5px;
+    width: auto;
+}

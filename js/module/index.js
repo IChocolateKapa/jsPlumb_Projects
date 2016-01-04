@@ -48,7 +48,7 @@ jsPlumb.ready(function () {
     // setup some defaults for jsPlumb.
     var instance = jsPlumb.getInstance({
         Endpoint: ["Dot", {radius: 2}],
-        Connector:"StateMachine",
+        Connector:"Bezier",//StateMachine
         HoverPaintStyle: {strokeStyle: "#1e8151", lineWidth: 2 },
         ConnectionOverlays: [
             [ "Arrow", {
@@ -88,7 +88,7 @@ jsPlumb.ready(function () {
          * */
 
         instance.makeSource(el, {
-            filter: ".ep",//从epdiv中作为拖动连接起点
+            filter: ".stateName",//从epdiv中作为拖动连接起点
             anchor: "Continuous",
             connectorStyle: { strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "transparent", outlineWidth: 4 },
             connectionType:"basic",
@@ -140,19 +140,40 @@ jsPlumb.ready(function () {
     };
 
 
-    var newNode = function(x, y) {
+    var newNode = function(x, y, name, mid, w, h) {
         var d = document.createElement("div");
-        var id = jsPlumbUtil.uuid();
+        var id = mid || jsPlumbUtil.uuid();
         d.className = "w";
         d.id = id;
-        d.innerHTML =  "<div class=\"ep\">" + id.substring(0, 7) + "</div>";
-        //d.innerHTML = id.substring(0, 7) + "<div class=\"ep\"></div>";
+        var selfName = name || id.substring(0, 7);
+        var state = "<input type='text' placeholder='输入节点名称' class='stateName' value='" + selfName + "'/>";
+        $(state).focus();
+        d.innerHTML =  "<div class=\"ep\">" + state + "</div>";
         d.style.left = x + "px";
         d.style.top = y + "px";
         instance.getContainer().appendChild(d);
         initNode(d);
         return d;
     };
+
+    /**
+     * Task 1: 双击节点时改名字，或者增加备注 --easy
+     * */
+
+    /**
+     * Task 2: 缩略图的展示 --hard
+     * */
+
+
+    /**
+     * Task 3: 右键菜单 --middle
+     * */
+
+
+    /**
+     * Task 4: 保存 位置， 大小，-easy 缩放级别 -middle
+     * */
+
 
 
     /**
@@ -261,8 +282,8 @@ jsPlumb.ready(function () {
                 id: id,
                 text: text
             };
-            nodeBasket.addItem(nodeList[i]);
-            //nodeBasket.addItem(elProps);
+            //nodeBasket.addItem(nodeList[i]);
+            nodeBasket.addItem(elProps);
         }
         console.log(nodeBasket.getItems());
 
@@ -271,12 +292,12 @@ jsPlumb.ready(function () {
         //获取所有连接
         var connectionList = instance.getConnections();
         for (var j = 0; j < connectionList.length; j++) {
-            /*var conn = {
-                source: connectionList[i].source.id,
-                target: connectionList[i].target.id
-            }*/
-            connectionBasket.addItem(connectionList[j]);
-            //connectionBasket.addItem(conn);
+            var conn = {
+                source: connectionList[j].source.id,
+                target: connectionList[j].target.id
+            };
+            //connectionBasket.addItem(connectionList[j]);
+            connectionBasket.addItem(conn);
         }
         console.log(connectionBasket.getItems());
 
@@ -288,7 +309,42 @@ jsPlumb.ready(function () {
 
         $(sampleHtml).appendTo($(".main_wrap_left")).css({'top': 200, 'left': 0});
         $("#container").empty();
+
     });
+
+    //reload
+    //$(".main_wrap_left").on(".left_block#sample", "click", function () {
+    $("#test").click(function () {
+        var nodes = nodeBasket.getItems(),
+            lists = connectionBasket.getItems();
+        for (var i = 0; i < nodes.length; i++){
+            var newCreated = newNode(nodes[i].left, nodes[i].top, nodes[i].text, nodes[i].id, nodes[i].width, nodes[i].height);
+            initNode(newCreated);
+        }
+        for (var j = 0; j < lists.length; j++) {
+            jsPlumb.connect({
+                source: lists[j].source,
+                target: lists[j].target,
+                newConnection:true,
+                paintStyle: { strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "transparent", outlineWidth: 4 },
+                endpoint:["Dot", {radius: 3, cssClass:"small-blue"}],
+                anchor: "Continuous",
+                overlays: [
+                    [ "Arrow", {
+                        location: .9,
+                        id: "arrow",
+                        length: 14,
+                        foldback: 0.8
+                    }],
+                ]
+            });
+        }
+
+
+        nodeBasket.empty();
+        connectionBasket.empty();
+    });
+
 
     /**
      * save this gragh 2015.12.30. -- end --

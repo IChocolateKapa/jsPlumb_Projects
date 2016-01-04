@@ -13,6 +13,9 @@ var nodeBasket = (function () {
         },
         getItems: function () {
             return privateNodeList;
+        },
+        empty: function () {
+            privateNodeList = [];
         }
     }
 })();
@@ -28,6 +31,10 @@ var connectionBasket = (function () {
         },
         getItems: function () {
             return privateConnectionList;
+        },
+        empty: function () {
+            privateConnectionList = [];
         }
+
     }
 })();

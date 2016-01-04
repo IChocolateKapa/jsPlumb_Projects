@@ -148,6 +148,12 @@ jsPlumb.ready(function () {
         var selfName = name || id.substring(0, 7);
         var state = "<input type='text' placeholder='输入节点名称' class='stateName' value='" + selfName + "'/>";
         $(state).focus();
+        $(state).keyup(function(e) {
+            if (e.keyCode === 13) {
+                console.log("this.value: ", this.value);
+                $(this).parent().text(this.value);
+            }
+        });
         d.innerHTML =  "<div class=\"ep\">" + state + "</div>";
         d.style.left = x + "px";
         d.style.top = y + "px";
@@ -308,25 +314,33 @@ jsPlumb.ready(function () {
                         + '</div>';
 
         $(sampleHtml).appendTo($(".main_wrap_left")).css({'top': 200, 'left': 0});
+        //instance.detachAll(false, true);
+        instance.detachEveryConnection();
+        //instance.repaintEverything();
+        //instance.clear();
+        //instance.deleteEveryEndpoint();
         $("#container").empty();
-
+        console.log("in saving lists.length : ", connectionBasket.getItems().length);
     });
 
     //reload
     //$(".main_wrap_left").on(".left_block#sample", "click", function () {
     $("#test").click(function () {
         var nodes = nodeBasket.getItems(),
-            lists = connectionBasket.getItems();
+            links = connectionBasket.getItems();
+
         for (var i = 0; i < nodes.length; i++){
             var newCreated = newNode(nodes[i].left, nodes[i].top, nodes[i].text, nodes[i].id, nodes[i].width, nodes[i].height);
             initNode(newCreated);
         }
-        console.log("lists.length : ", lists.length);
-        for (var j = 0; j < lists.length; j++) {
+
+
+        console.log("lists.length : ", links.length);
+        for (var j = 0; j < links.length; j++) {
             instance.connect({
-                source: lists[j].source,
-                target: lists[j].target,
-                newConnection: true,
+                source: links[j].source,
+                target: links[j].target,
+                //newConnection: true,
                 paintStyle: { strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "transparent", outlineWidth: 4 },
                 endpoint: ["Dot", {radius: 3, cssClass:"small-blue"}],
                 anchor: "Continuous",
@@ -340,8 +354,6 @@ jsPlumb.ready(function () {
                     }]
                 ],
             });
-
-            //jsPlumb.connect(lists[j]);
         }
 
 
@@ -380,13 +392,12 @@ jsPlumb.ready(function () {
     // bind beforeDetach interceptor: will be fired when the click handler above calls detach, and the user
     // will be prompted to confirm deletion.
     instance.bind("beforeDetach", function (conn) {
-        var ret = confirm("Delete connection?");
-
+        /*var ret = confirm("Delete connection?");
         var event = window.event;
         event.preventDefault();
         event.stopPropagation();
-
-        return ret;
+        return ret;*/
+        return true
     });
 
 

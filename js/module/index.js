@@ -105,7 +105,7 @@ jsPlumb.ready(function () {
         instance.makeTarget(el, {
             dropOptions: { hoverClass: "dragHover" },
             anchor: "Continuous",
-            allowLoopback: true,
+            allowLoopback: false,//true
             endpoint:["Dot", {radius: 3, cssClass:"small-blue"}]
         });
 
@@ -115,14 +115,15 @@ jsPlumb.ready(function () {
          * */
         instance.on(el, "click", function (event) {
             //注意在建立连接完成时也会触发这个事件
-            console.log(event.target);
+            console.log("click node target: ", event.target);
         });
         /**
          * 给新添加的节点添加绑定事件
          * */
         instance.on(el, "dblclick", function (event) {
             //注意在建立连接完成时也会触发这个事件
-            console.log(event.target);
+            //console.log(event.target);
+            console.log("dblclick node target: ", event.target);
             var ret = confirm("确实要删除这个节点吗？");
             if (ret) {
                 /*节点删除*/
@@ -136,7 +137,7 @@ jsPlumb.ready(function () {
         // this is not part of the core demo functionality;
         // it is a means for the Toolkit edition's wrapped
         // version of this demo to find out about new nodes being added.
-        instance.fire("jsPlumbDemoNodeAdded", el);
+        //instance.fire("jsPlumbDemoNodeAdded", el);
     };
 
 

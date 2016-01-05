@@ -4,6 +4,26 @@
 
 var jsPmbUtil = {
 
+    getInstance: function () {
+        var instance = jsPlumb.getInstance({
+            Endpoint: ["Dot", {radius: 2}],
+            Connector:"Bezier",//StateMachine
+            HoverPaintStyle: {strokeStyle: "#1e8151", lineWidth: 2},
+            ConnectionOverlays: [
+                [ "Arrow", {
+                    location: .9,
+                    id: "arrow",
+                    length: 14,
+                    foldback: 0.8
+                } ]
+                /*[ "Label", { label: "FOO", id: "label", cssClass: "aLabel" }]*/
+            ],
+            Container: "container"
+        });
+
+        return instance;
+    },
+
     initNode: function(instance, el) {
 
         // initialise draggable elements.
@@ -256,5 +276,58 @@ var jsPmbUtil = {
         }
 
         console.log("after zooming, curZoom is : ", instance.getZoom());
+    },
+
+
+    /**
+     * Echo Added -- begin -- 2015.12.29
+     * 要实现元素的拖动， 必须该元素的定位是absolute, 并且其父元素是relative定位
+     * 不谈， 即使设置了draggable方法， 元素也是没有拖动反应的
+     * */
+    /**
+     * Echo Added -- begin -- 2015.12.29 : add Jquery ui method into jsPlumb.ready
+     * */
+    initDragDropElements: function (instance) {
+
+        var self = this;
+
+        $(".main_wrap_left .left_block").draggable({
+            appendTo: "#container",
+            helper: "clone",
+            zIndex: 10000,
+            opacity: 0.8,
+            start: function (event, ui) {
+            },
+            drag: function (event , ui) {
+                var t = event.pageY,
+                    l = event.pageX,
+                    ss = "top: " + t + ", left: " + l;
+                $("#panel").html(ss);
+            }
+        });
+        $("#container").droppable({
+            hoverClass: "hover-class-test",
+            accept: ".left_block",
+            drop: function(event, ui) {
+
+                var $Item =  ui.draggable;
+                var $itemClone = $Item.clone().addClass("w");
+
+                var t = event.pageY - event.offsetY,
+                    l = event.pageX - event.offsetX - $(".main_wrap_left").width();
+
+                $itemClone.css({"top": t, "left": l}).appendTo($("#container"));
+
+                self.initNode(instance, $itemClone);
+            }
+        });
+
+    },
+
+    /*更新miniMap*/
+    rePaintMap: function (instance) {
+
     }
+
+
 }

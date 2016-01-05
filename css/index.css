@@ -28,7 +28,10 @@ div[class^='main_wrap_']{
     float: left;
 }
 .main_wrap_right{
+    position: relative;
     margin-left: 200px;
+    overflow: hidden;
+    background-color: white;
 }
 
 .left_block{
@@ -68,9 +71,13 @@ div[class^='main_wrap_']{
 #container a{
     width: 200px;
 }
-#container a:hover,
 .main_wrap_left li a:hover{
     background: #3284a7;
+    color: #fff;
+    border-radius: 5px;
+}
+#container .left_block:hover a{
+    background: white;
     color: #fff;
     border-radius: 5px;
 }
@@ -78,7 +85,7 @@ div[class^='main_wrap_']{
 #container{
     width: 100%;
     height: 100%;
-    background-color: rgba(45, 123, 67, .3);
+    background-color: white;
     position: relative;
 }
 
@@ -92,7 +99,7 @@ div[class^='main_wrap_']{
 .hover-class-test{
     box-shadow: 0 0 15px 5px rgba(50, 132, 167, .4);
     /*border: 1px solid #3284a7;*/
-    background-color: white !important;
+    background-color: rgba(198, 64, 13, 0.3) !important;
 }
 .footer{
     height: 100px;
@@ -102,4 +109,23 @@ div[class^='main_wrap_']{
     display: inline-block;
     margin-left: 300px;
     width: 400px;
+}
+#mapPanel{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 200px;
+    height: 200px;
+    background-color: rgba(0,0,0,.2);
+    z-index: 99999;
+    overflow: hidden;
+}
+#dragRect {
+    position: absolute;
+    bottom: 50px;
+    left: 50px;
+    width: 100px;
+    height: 100px;
+    background-color: rgba(50, 132, 167, .4);
+    z-index: 100000;
 }

@@ -21,26 +21,31 @@
     <script src="js/module/basket.js"></script>
     <script src="js/module/index.js"></script>
     <script src="js/lib/common-event.js"></script>
+    <script src="js/module/util.js"></script>
 </head>
 <body>
 <div class="main_wrap">
 
     <div class="main_wrap_left" id="main_wrap_left">
         <div class="left_block" id="test">
-            <a href="javascript:void(0)"><span class="ep">block1</span></a>
+            <a href="javascript:void(0)"><span class="ep stateName">block1</span></a>
         </div>
         <div class="left_block">
-            <a href="javascript:void(0)"><span class="ep">block2</span></a>
+            <a href="javascript:void(0)"><span class="ep stateName">block2</span></a>
         </div>
         <div class="left_block">
-            <a href="javascript:void(0)"><span class="ep">block3</span></a>
+            <a href="javascript:void(0)"><span class="ep stateName">block3</span></a>
         </div>
         <div class="left_block">
-            <a href="javascript:void(0)"><span class="ep">block4</span></a>
+            <a href="javascript:void(0)"><span class="ep stateName">block4</span></a>
         </div>
     </div>
 
     <div class="main_wrap_right">
+
+        <div id="mapPanel">
+            <div id="dragRect"></div>
+        </div>
 
         <div id="container"></div>
 

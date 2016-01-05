@@ -38,12 +38,12 @@
 /*跨浏览器事件处理程序*/
 var eventUtil = {
     /*绑定事件*/
-    addHandler: function(element, type, method){
-        if(element.addEventListener){
+    addHandler: function (element, type, method) {
+        if (element.addEventListener) {
             element.addEventListener(type, method, false);
-        } else if(element.attachEvent){
+        } else if (element.attachEvent) {
             element.attachEvent('on'+type, method);
-        } else{
+        } else {
             /*Dom 0级事件处理程序*/
             /*js中，所有点号连接的事件处理程序都可以使用中括号来代替， 即：*/
             /*element.onclick === element['onclick']*/
@@ -51,12 +51,12 @@ var eventUtil = {
         }
     },
     /*删除绑定事件*/
-    removeHandler: function(element, type, method){
-        if(element.removeEventListener){
+    removeHandler: function (element, type, method) {
+        if (element.removeEventListener) {
             element.removeEventListener(type, method, false);
-        } else if(element.dettachEvent){
+        } else if (element.dettachEvent) {
             element.dettachEvent('on'+type, method);
-        } else{
+        } else {
             /*Dom 0级事件处理程序*/
             /*js中，所有点号连接的事件处理程序都可以使用中括号来代替， 即：*/
             /*element.onclick === element['onclick']*/
@@ -65,56 +65,62 @@ var eventUtil = {
     },
 
     /*获取事件*/
-    getEvent: function(event){
+    getEvent: function (event) {
         return event?event:window.event;
     },
 
     /*获取事件类型*/
-    getType: function(event){
+    getType: function (event) {
         return event.type;
     },
 
     /*获取事件目标对象target*/
-    getTarget: function(event){
+    getTarget: function (event) {
         return event.target || event.srcElement;
     },
 
     /*取消事件默认行为*/
-    preventDefault: function(event){
-        if(event.preventDefault){
+    preventDefault: function (event) {
+        if (event.preventDefault) {
             event.preventDefault();
-        } else{
+        } else {
             event.returnValue = false;
         }
     },
 
     /*取消事件冒泡*/
-    stopPropagation: function(event){
-        if(event.stopPropagation){
+    stopPropagation: function (event) {
+        var event = this.getEvent(event);
+        if (event.stopPropagation) {
             event.stopPropagation();
-        } else{
+        } else {
             event.cancelBubble = false;
         }
     },
 
     /*鼠标按下事件*/
-    enterKeyPress: function(event, handler){
-        event = this.getEvent(event);
-        if(event.keyCode == 13){
+    enterKeyPress: function (event, handler) {
+        var event = this.getEvent(event);
+        if (event.keyCode == 13) {
             handler();
-        } else{
+        } else {
             return false;
         }
     },
 
-    /*监听鼠标滚动事件*/
-    scrollFunc: function(event){
-        var e = event || window.event;
-        if(e.wheelDelta){
+    /*获取鼠标滚动方向
+    * ret:
+    *     true为向下
+    *     false为向上*/
+    getScrollDirection: function (e) {
+        event = this.getEvent(e);
+        this.preventDefault(event);
 
-        }
+        var value = event.originalEvent.wheelDelta || -event.originalEvent.detail,//-120， 3
+            delta = Math.max(-1, Math.min(1, value));
+
+        return delta < 0? true: false;
     }
-
-}
+};
 
 

@@ -40,6 +40,35 @@
     });
 });*/
 
+/**
+ * Set Zoom -- begin 2015.12.30
+ * */
+
+setContainerZoom = function(zoom, instance, transformOrigin, el) {
+    transformOrigin = transformOrigin || [ 0.5, 0.5 ];
+    instance = instance || jsPlumb;
+    el = el || instance.getContainer();
+    var p = [ "webkit", "moz", "ms", "o" ],
+        s = "scale(" + zoom + ")",
+        oString = (transformOrigin[0] * 100) + "% " + (transformOrigin[1] * 100) + "%";
+
+    for (var i = 0; i < p.length; i++) {
+        el.style[p[i] + "Transform"] = s;
+        el.style[p[i] + "TransformOrigin"] = oString;
+    }
+
+    el.style["transform"] = s;
+    el.style["transformOrigin"] = oString;
+
+    instance.setZoom(zoom);
+};
+
+
+/**
+ * Set Zoom -- begin 2015.12.30
+ * */
+
+
 var instance;
 jsPlumb.ready(function () {
 
@@ -231,35 +260,6 @@ jsPlumb.ready(function () {
 
 
 
-    /**
-     * Set Zoom -- begin 2015.12.30
-     * */
-
-    window.setZoom = function(zoom, instance, transformOrigin, el) {
-        transformOrigin = transformOrigin || [ 0.5, 0.5 ];
-        instance = instance || jsPlumb;
-        el = el || instance.getContainer();
-        var p = [ "webkit", "moz", "ms", "o" ],
-            s = "scale(" + zoom + ")",
-            oString = (transformOrigin[0] * 100) + "% " + (transformOrigin[1] * 100) + "%";
-
-        for (var i = 0; i < p.length; i++) {
-            el.style[p[i] + "Transform"] = s;
-            el.style[p[i] + "TransformOrigin"] = oString;
-        }
-
-        el.style["transform"] = s;
-        el.style["transformOrigin"] = oString;
-
-        instance.setZoom(zoom);
-    };
-
-    /**
-     * Set Zoom -- begin 2015.12.30
-     * */
-
-
-
 
 
     /**
@@ -369,7 +369,50 @@ jsPlumb.ready(function () {
 
         nodeBasket.empty();
         connectionBasket.empty();
+
+        //测试缩放函数
+        //setContainerZoom(0.32, instance, [], $("#container")[0]);
     });
+
+
+    /**
+     * 鼠标滚轮控制缩放
+     * */
+    var flag = true;
+    /*在容器中需要取消鼠标滚轮的事件冒泡*/
+    $("#container").on("mousewheel DOMMouseScroll", function(e){
+        e.stopPropagation(event);
+    });
+
+    //eve.addHandler($(".slide"), "mousewheel DOMMouseScroll", MouseWheelHandler);
+    $("#container").on("mousewheel DOMMouseScroll", MouseWheelHandler);
+
+    /*获取鼠标滚动方向，true为向下，false为向上*/
+    function getScrollDirection (e) {
+        event = eventUtil.getEvent(e);
+        event.preventDefault(event);
+        var value = event.originalEvent.wheelDelta || -event.originalEvent.detail;//-120， 3
+        var delta = Math.max(-1, Math.min(1, value));
+        return delta < 0? true: false;
+    }
+
+    /*利用延迟和开关就能控制滚轮事件*/
+    function MouseWheelHandler(e){
+        var isNext = getScrollDirection(e);
+        console.log(isNext);
+        var curZoom = instance.getZoom();
+        console.log("before zooming, curZoom is : ", instance.getZoom());
+        /*if(curZoom > 1 || curZoom < 0.1) {
+            return  false;
+        }*/
+        if (isNext) {
+            setContainerZoom(curZoom - 0.1, instance, [curZoom, curZoom], $("#container")[0]);
+        } else {
+            setContainerZoom(curZoom + 0.1, instance, [curZoom, curZoom], $("#container")[0]);
+        }
+
+        console.log("after zooming, curZoom is : ", instance.getZoom());
+    }
 
 
     /**
@@ -439,7 +482,6 @@ jsPlumb.ready(function () {
 
 
     jsPlumb.fire("jsPlumbDemoLoaded", instance);
-
 
 
 });

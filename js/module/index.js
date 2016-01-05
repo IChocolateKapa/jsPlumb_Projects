@@ -44,7 +44,7 @@
  * Set Zoom -- begin 2015.12.30
  * */
 
-setContainerZoom = function(zoom, instance, transformOrigin, el) {
+function setContainerZoom (zoom, instance, transformOrigin, el) {
     transformOrigin = transformOrigin || [ 0.5, 0.5 ];
     instance = instance || jsPlumb;
     el = el || instance.getContainer();
@@ -61,7 +61,28 @@ setContainerZoom = function(zoom, instance, transformOrigin, el) {
     el.style["transformOrigin"] = oString;
 
     instance.setZoom(zoom);
-};
+}
+
+
+/*利用延迟和开关就能控制滚轮事件*/
+function MouseWheelHandler(e, instance){
+    var isNext = eventUtil.getScrollDirection(e);
+    var curZoom = instance.getZoom();
+
+    console.log("before zooming, curZoom is : ", instance.getZoom());
+
+    /*不能再缩小了...要不看不见了*/
+    if (curZoom < 0.1) {
+        return  false;
+    }
+    if (isNext) {//[curZoom, curZoom]
+        setContainerZoom(curZoom - 0.1, instance, curZoom, $("#container")[0]);
+    } else {
+        setContainerZoom(curZoom + 0.1, instance, curZoom, $("#container")[0]);
+    }
+
+    console.log("after zooming, curZoom is : ", instance.getZoom());
+}
 
 
 /**
@@ -78,7 +99,7 @@ jsPlumb.ready(function () {
     instance = jsPlumb.getInstance({
         Endpoint: ["Dot", {radius: 2}],
         Connector:"Bezier",//StateMachine
-        HoverPaintStyle: {strokeStyle: "#1e8151", lineWidth: 2 },
+        HoverPaintStyle: {strokeStyle: "#1e8151", lineWidth: 2},
         ConnectionOverlays: [
             [ "Arrow", {
                 location: .9,
@@ -242,7 +263,7 @@ jsPlumb.ready(function () {
         drop: function(event, ui) {
 
             var $Item =  ui.draggable;
-            var $itemClone = $Item.clone();
+            var $itemClone = $Item.clone().addClass("w");
 
             var t = event.pageY - event.offsetY,
                 l = event.pageX - event.offsetX - $(".main_wrap_left").width();
@@ -315,11 +336,7 @@ jsPlumb.ready(function () {
                         + '</div>';
 
         $(sampleHtml).appendTo($(".main_wrap_left")).css({'top': 200, 'left': 0});
-        //instance.detachAll(false, true);
         instance.detachEveryConnection();
-        //instance.repaintEverything();
-        //instance.clear();
-        //instance.deleteEveryEndpoint();
 
         //however, it's useless.....
         var allNodes = instance.getSelector(".w"),
@@ -370,49 +387,18 @@ jsPlumb.ready(function () {
         nodeBasket.empty();
         connectionBasket.empty();
 
-        //测试缩放函数
-        //setContainerZoom(0.32, instance, [], $("#container")[0]);
     });
 
 
     /**
      * 鼠标滚轮控制缩放
      * */
-    var flag = true;
     /*在容器中需要取消鼠标滚轮的事件冒泡*/
-    $("#container").on("mousewheel DOMMouseScroll", function(e){
-        e.stopPropagation(event);
+    $("#container").on("mousewheel DOMMouseScroll", function (e) {
+        eventUtil.stopPropagation(e);
+        MouseWheelHandler(e, instance);
     });
 
-    //eve.addHandler($(".slide"), "mousewheel DOMMouseScroll", MouseWheelHandler);
-    $("#container").on("mousewheel DOMMouseScroll", MouseWheelHandler);
-
-    /*获取鼠标滚动方向，true为向下，false为向上*/
-    function getScrollDirection (e) {
-        event = eventUtil.getEvent(e);
-        event.preventDefault(event);
-        var value = event.originalEvent.wheelDelta || -event.originalEvent.detail;//-120， 3
-        var delta = Math.max(-1, Math.min(1, value));
-        return delta < 0? true: false;
-    }
-
-    /*利用延迟和开关就能控制滚轮事件*/
-    function MouseWheelHandler(e){
-        var isNext = getScrollDirection(e);
-        console.log(isNext);
-        var curZoom = instance.getZoom();
-        console.log("before zooming, curZoom is : ", instance.getZoom());
-        /*if(curZoom > 1 || curZoom < 0.1) {
-            return  false;
-        }*/
-        if (isNext) {
-            setContainerZoom(curZoom - 0.1, instance, [curZoom, curZoom], $("#container")[0]);
-        } else {
-            setContainerZoom(curZoom + 0.1, instance, [curZoom, curZoom], $("#container")[0]);
-        }
-
-        console.log("after zooming, curZoom is : ", instance.getZoom());
-    }
 
 
     /**
@@ -484,4 +470,15 @@ jsPlumb.ready(function () {
     jsPlumb.fire("jsPlumbDemoLoaded", instance);
 
 
+    $("#dragRect").draggable(/*{
+        'containment': 'parent'
+    }*/)
+
 });
+
+
+
+/*更新miniMap*/
+function rePaintMap (instance) {
+
+}

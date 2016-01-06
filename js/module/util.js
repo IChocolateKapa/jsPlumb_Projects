@@ -1,15 +1,14 @@
 /**
  * Created by Echo on 2016/1/5.
  */
-function print (msg) {
-    console.log(msg);
-}
 
 
 var containerID = "container",
     canvasID = "canvas",
     $canvas = $("#"+canvasID),
     $container = $("#"+containerID);
+
+var scale = 0.25;
 
 var jsPmbUtil = {
 
@@ -34,6 +33,8 @@ var jsPmbUtil = {
     },
 
     initNode: function(instance, el) {
+
+        var self = this;
 
         // initialise draggable elements.
         instance.draggable(el/*, {
@@ -105,6 +106,9 @@ var jsPmbUtil = {
         // it is a means for the Toolkit edition's wrapped
         // version of this demo to find out about new nodes being added.
         //instance.fire("jsPlumbDemoNodeAdded", el);
+
+
+        self.addRectToMap(el);
     },
 
     addNode: function (instance, x, y, name, mid, w, h) {
@@ -124,7 +128,6 @@ var jsPmbUtil = {
         d.innerHTML =  "<div class=\"ep\">" + state + "</div>";
         d.style.left = x + "px";
         d.style.top = y + "px";
-        //$(instance.getContainer()).find("#canvas")[0].appendChild(d);
         instance.getContainer().appendChild(d);
         this.initNode(instance, d);
         return d;
@@ -307,6 +310,12 @@ var jsPmbUtil = {
      * */
     initDragDropElements: function (instance) {
 
+        $("#mapPanel").css({
+            'width': $container.width() * scale + "px",
+            'height': $container.height() * scale + "px"
+        })
+
+
         var self = this;
 
         //鼠标左键按住 拖动整个画面的这个功能， 不必要。 因为， 有了miniMap
@@ -400,7 +409,8 @@ var jsPmbUtil = {
      * 根据当前缩放级别，设置miniMap的相应缩放
      * 1. 要按比例，需要canvas的宽高知道后， 根据比例生成一个miniMap的组件， 不然组件位置无法控制
      * */
-    updateMiniMap: function (instance, zoom) {
+    updateMiniMap: function (instance, ele, zoom, isNew) {
+
 
         var curZoom = zoom || instance.getZoom();
 
@@ -412,7 +422,25 @@ var jsPmbUtil = {
             "-moz-transform": "scale("+setZ+")",
             "ms-transform": "scale("+setZ+")"
         })
+    },
+
+    addRectToMap: function (el) {
+        var eleH = $(el).height(),
+            eleW = $(el).width(),
+            elPosX = $(el).position().left,
+            elPosY = $(el).position().top;
+
+        var newRect = "<div class='rect'></div>";
+        $(newRect).css({
+            'position': 'absolute',
+            'width': eleW * scale + "px",
+            'height': eleH * scale + "px",
+            'top': elPosY * scale + "px",
+            'left': elPosX * scale + "px"
+        }).appendTo($("#mapPanel"));
+
     }
+
 
 
 }

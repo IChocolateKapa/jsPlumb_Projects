@@ -85,10 +85,21 @@ div[class^='main_wrap_']{
 #container{
     width: 100%;
     height: 100%;
-    background-color: white;
+    background-color: rgba(198, 64, 13, 0.3);
     position: relative;
+    overflow: hidden !important;
 }
-
+#canvas{
+    /*width: 50px;*/
+    /*height: 50px;*/
+    width: 100%;
+    height: 100%;
+    position: relative;
+    top: 0;
+    background: red;
+    left: 0;
+    overflow: visible !important;
+}
 #panel{
     color: #fff;
     font-weight: 400;
@@ -99,7 +110,7 @@ div[class^='main_wrap_']{
 .hover-class-test{
     box-shadow: 0 0 15px 5px rgba(50, 132, 167, .4);
     /*border: 1px solid #3284a7;*/
-    background-color: rgba(198, 64, 13, 0.3) !important;
+    background-color: white !important;/*rgba(198, 64, 13, 0.3)*/
 }
 .footer{
     height: 100px;
@@ -122,10 +133,14 @@ div[class^='main_wrap_']{
 }
 #dragRect {
     position: absolute;
-    bottom: 50px;
-    left: 50px;
-    width: 100px;
-    height: 100px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-color: rgba(50, 132, 167, .4);
     z-index: 100000;
+    cursor: move;
+}
+.rect{
+    background-color: red;
 }

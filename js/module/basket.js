@@ -38,3 +38,12 @@ var connectionBasket = (function () {
 
     }
 })();
+
+
+
+var containerID = "container",
+    canvasID = "canvas",
+    $canvas = $("#"+canvasID),
+    $container = $("#"+containerID);
+
+var scale = 0.25;

@@ -18,6 +18,10 @@
     <script src="js/lib/jquery/dist/jquery.min.js"></script>
     <script  src="js/lib/jquery-ui-1.11.4/jquery-ui.min.js"></script>
     <script src="js/lib/jsPlumb/jsPlumb-2.0.5.js"></script>
+    <script src="js/module/basket.js"></script>
+    <script src="js/module/index.js"></script>
+    <script src="js/lib/common-event.js"></script>
+    <script src="js/module/util.js"></script>
 </head>
 <body>
 <div class="main_wrap">
@@ -57,10 +61,13 @@
         <input type="button" value="save" id="save_gragh" class="btn primary"/>
     </div>
 </div>
-
-<script src="js/module/basket.js"></script>
-<script src="js/module/index.js"></script>
-<script src="js/lib/common-event.js"></script>
-<script src="js/module/util.js"></script>
+<script>
+    $(function () {
+        $("#mapPanel").css({
+            'width': $("#container").width() * scale + "px",
+            'height': $("#container").height() * scale + "px"
+        })
+    })
+</script>
 </body>
 </html>

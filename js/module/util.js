@@ -3,13 +3,6 @@
  */
 
 
-var containerID = "container",
-    canvasID = "canvas",
-    $canvas = $("#"+canvasID),
-    $container = $("#"+containerID);
-
-var scale = 0.25;
-
 var jsPmbUtil = {
 
     getInstance: function () {
@@ -294,7 +287,7 @@ var jsPmbUtil = {
             self.setContainerZoom(curZoom + 0.1, instance, [curZoom, curZoom], $canvas[0]);
         }
 
-        this.updateMiniMap(instance, instance.getZoom());
+        //this.updateMiniMap(instance, instance.getZoom());
         console.log("after zooming, curZoom is : ", instance.getZoom());
     },
 
@@ -309,12 +302,6 @@ var jsPmbUtil = {
      * Echo Added -- begin -- 2015.12.29 : add Jquery ui method into jsPlumb.ready
      * */
     initDragDropElements: function (instance) {
-
-        $("#mapPanel").css({
-            'width': $container.width() * scale + "px",
-            'height': $container.height() * scale + "px"
-        })
-
 
         var self = this;
 
@@ -363,6 +350,7 @@ var jsPmbUtil = {
 
             //记下初始元素位置
             //bug: zoom后元素的位置不稳定
+            //fix: zoom transformOrigin不正确， 修改为 "left top"即可
             var elePosX = $("#canvas").position().left,
                 elePosY = $("#canvas").position().top;
 
@@ -395,6 +383,14 @@ var jsPmbUtil = {
                     "-moz-transformOrigin": "left top",
                     "-ms-transformOrigin": "left top"
                 })
+
+                //miniMap的拖块也要相应位移
+                $("#dragRect").css({
+                    "transform": "translate(-" + moveX*scale + "px, -" + moveY*scale + "px)",
+                    "-webkit-transform": "translate(-" + moveX*scale + "px, -" + moveY*scale + "px)",
+                    "-moz-transform": "translate(-" + moveX*scale + "px, " + moveY*scale + "px)",
+                    "-ms-transform": "translate(-" + moveX*scale + "px, -" + moveY*scale + "px)",
+                });
 
             });
 

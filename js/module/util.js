@@ -1,13 +1,22 @@
 /**
  * Created by Echo on 2016/1/5.
  */
+function print (msg) {
+    console.log(msg);
+}
+
+
+var containerID = "container",
+    canvasID = "canvas",
+    $canvas = $("#"+canvasID),
+    $container = $("#"+containerID);
 
 var jsPmbUtil = {
 
     getInstance: function () {
         var instance = jsPlumb.getInstance({
             Endpoint: ["Dot", {radius: 2}],
-            Connector:"Bezier",//StateMachine
+            Connector: "Bezier",//StateMachine
             HoverPaintStyle: {strokeStyle: "#1e8151", lineWidth: 2},
             ConnectionOverlays: [
                 [ "Arrow", {
@@ -18,7 +27,7 @@ var jsPmbUtil = {
                 } ]
                 /*[ "Label", { label: "FOO", id: "label", cssClass: "aLabel" }]*/
             ],
-            Container: "container"
+            Container: canvasID
         });
 
         return instance;
@@ -27,9 +36,9 @@ var jsPmbUtil = {
     initNode: function(instance, el) {
 
         // initialise draggable elements.
-        instance.draggable(el, {
+        instance.draggable(el/*, {
             "containment": "parent"
-        });
+        }*/);
 
         /*Echo Added*/
         //instance.setSourceEnabled(el);
@@ -41,8 +50,8 @@ var jsPmbUtil = {
          * There would be no way for jsPlumb to distinguish between the user attempting to drag the element and attempting to drag a Connection from the element.
          * To handle this there is the filter parameter.
          *
-         * To sum up, 如果一个节点作为连接起点，想要从任意地方都能拖出连接， 是不可能的，要么，这个source节点本身不可拖动，
-         * 要么， 通过filter 属性指定 从这个节点里某个位置拖连接线。
+         * To sum up, 如果一个节点作为可拖动的连接起点，想要从任意地方都能拖出连接， 是不可能的，要么，这个source节点本身不可拖动，
+         * 要么， 通过filter 属性指定 从这个节点里某个位置拖连接线。当然你可以把这个节点的样式设置的不那么明显
          * */
 
         instance.makeSource(el, {
@@ -115,6 +124,7 @@ var jsPmbUtil = {
         d.innerHTML =  "<div class=\"ep\">" + state + "</div>";
         d.style.left = x + "px";
         d.style.top = y + "px";
+        //$(instance.getContainer()).find("#canvas")[0].appendChild(d);
         instance.getContainer().appendChild(d);
         this.initNode(instance, d);
         return d;
@@ -193,7 +203,7 @@ var jsPmbUtil = {
             .removeAllNodes(instance);
 
         /*暂时先清空*/
-        $("#container").empty();
+        $canvas.empty();
         console.log("in saving lists.length : ", connectionBasket.getItems().length);
 
     },
@@ -238,6 +248,8 @@ var jsPmbUtil = {
     //设置缩放等级
     setContainerZoom: function (zoom, instance, transformOrigin, el) {
 
+        console.log("before zoom, position.left: ", $("#canvas").position().left,  " position.top: ", $("#canvas").position().top)
+
         var transformOrigin = transformOrigin || [ 0.5, 0.5],
             instance = instance || jsPlumb,
             el = el || instance.getContainer();
@@ -253,8 +265,12 @@ var jsPmbUtil = {
 
         el.style["transform"] = s;
         el.style["transformOrigin"] = oString;
+        //el.style["width"] = $(".main_wrap_right").width() + "px";
+        //el.style["height"] = $(".main_wrap_right").height() + "px";
 
-        instance.setZoom(zoom);
+        instance.setZoom(zoom, true);
+
+        console.log("after zoom, position.left: ", $("#canvas").position().left,  " position.top: ", $("#canvas").position().top)
     },
 
     MouseWheelHandler: function (e, instance) {
@@ -269,14 +285,16 @@ var jsPmbUtil = {
         if (curZoom < 0.1) {
             return;
         }
-        if (isNext) {//[curZoom, curZoom]
-            self.setContainerZoom(curZoom - 0.1, instance, curZoom, $("#container")[0]);
+        if (isNext) {//
+            self.setContainerZoom(curZoom - 0.1, instance, [curZoom, curZoom], $canvas[0]);
         } else {
-            self.setContainerZoom(curZoom + 0.1, instance, curZoom, $("#container")[0]);
+            self.setContainerZoom(curZoom + 0.1, instance, [curZoom, curZoom], $canvas[0]);
         }
 
+        this.updateMiniMap(instance, instance.getZoom());
         console.log("after zooming, curZoom is : ", instance.getZoom());
     },
+
 
 
     /**
@@ -291,8 +309,14 @@ var jsPmbUtil = {
 
         var self = this;
 
+        //鼠标左键按住 拖动整个画面的这个功能， 不必要。 因为， 有了miniMap
+        $canvas.draggable();
+        //同时， 要给container加上mousemove的事件监听
+        
+
+
         $(".main_wrap_left .left_block").draggable({
-            appendTo: "#container",
+            appendTo: "#"+canvasID,
             helper: "clone",
             zIndex: 10000,
             opacity: 0.8,
@@ -305,7 +329,7 @@ var jsPmbUtil = {
                 $("#panel").html(ss);
             }
         });
-        $("#container").droppable({
+        $canvas.droppable({
             hoverClass: "hover-class-test",
             accept: ".left_block",
             drop: function(event, ui) {
@@ -316,17 +340,78 @@ var jsPmbUtil = {
                 var t = event.pageY - event.offsetY,
                     l = event.pageX - event.offsetX - $(".main_wrap_left").width();
 
-                $itemClone.css({"top": t, "left": l}).appendTo($("#container"));
+                $itemClone.css({"top": t, "left": l}).appendTo($canvas);
 
                 self.initNode(instance, $itemClone);
             }
         });
 
+        $("#container").on('mousedown', function (e) {
+            var curZoom = instance.getZoom();
+            var event = eventUtil.getEvent(e),
+                orgPosX = event.pageX,
+                orgPosY = event.pageY;
+
+            //记下初始元素位置
+            //bug: zoom后元素的位置不稳定
+            var elePosX = $("#canvas").position().left,
+                elePosY = $("#canvas").position().top;
+
+            console.log("onmousedown, elePosX: ",  elePosX, ",  elePosY", elePosY);
+
+            $("#container").on('mousemove', function (e) {
+                var event2 = eventUtil.getEvent(e),
+                    curPosX = event2.pageX,
+                    curPosY = event2.pageY;
+
+
+                //var moveX = (elePosX + (curPosX - orgPosX)) * curZoom,
+                //    moveY = (elePosY + (curPosY - orgPosY)) * curZoom;
+                var moveX = (elePosX + (curPosX - orgPosX)),
+                    moveY = (elePosY + (curPosY - orgPosY));
+
+
+                console.log("moveX=", moveX,  ", moveY=", moveY);
+
+                /**
+                 * transformOrigin非常重要非常重要非常重要
+                 * */
+                $("#canvas").css({
+                    "transform": "translate(" + moveX + "px, " + moveY + "px) scale(" + curZoom + ")",
+                    "-webkit-transform": "translate(" + moveX + "px, " + moveY + "px) scale(" + curZoom + ")",
+                    "-moz-transform": "translate(" + moveX + "px, " + moveY + "px) scale(" + curZoom + ")",
+                    "-ms-transform": "translate(" + moveX + "px, " + moveY + "px) scale(" + curZoom + ")",
+                    "transformOrigin": "left top",
+                    "-webkit-transformOrigin": "left top",
+                    "-moz-transformOrigin": "left top",
+                    "-ms-transformOrigin": "left top"
+                })
+
+            });
+
+            $("#container").on('mouseup',function (e) {
+                $("#container").off('mousemove');
+            });
+        });
+
     },
+    /**
+     * 更新miniMap
+     * 根据当前缩放级别，设置miniMap的相应缩放
+     * 1. 要按比例，需要canvas的宽高知道后， 根据比例生成一个miniMap的组件， 不然组件位置无法控制
+     * */
+    updateMiniMap: function (instance, zoom) {
 
-    /*更新miniMap*/
-    rePaintMap: function (instance) {
+        var curZoom = zoom || instance.getZoom();
 
+        var setZ = curZoom > 1? curZoom: 1+curZoom;
+
+        $("#dragRect").css({
+            "transform": "scale("+setZ+")",
+            "-webkit-transform": "scale("+setZ+")",
+            "-moz-transform": "scale("+setZ+")",
+            "ms-transform": "scale("+setZ+")"
+        })
     }
 
 

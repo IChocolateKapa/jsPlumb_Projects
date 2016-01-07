@@ -395,8 +395,8 @@ var jsPmbUtil = {
                     //disYScale = rectPosY + moveY;
                     //disXScale = disX*scale,
                     //disYScale = disY*scale;
-                    disXScale = curelePosX*scale,
-                    disYScale = curelePosX*scale;
+                    disXScale = -curelePosX*scale,
+                    disYScale = -curelePosX*scale;
                     //disXScale = rectPosX - moveX*scale,
                     //disYScale = rectPosY - moveY*scale;
 
@@ -410,8 +410,8 @@ var jsPmbUtil = {
                 });*/
 
                 $("#dragRect").css({
-                    "top": "-" + disYScale + "px",
-                    "left": "-" + disXScale + "px"
+                    "top": disYScale + "px",
+                    "left": disXScale + "px"
                 })
 
             });

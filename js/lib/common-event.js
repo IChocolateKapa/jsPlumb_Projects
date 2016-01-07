@@ -4,82 +4,82 @@
 
 
 /*
- Ò»¡¢ÊÂ¼şÁ÷
- ÊÂ¼şÁ÷ÃèÊöµÄÊÇ´ÓÒ³ÃæÖĞ½ÓÊÜÊÂ¼şµÄË³Ğò¡£
- IEµÄÊÂ¼şÁ÷ÊÇÊÂ¼şÃ°ÅİÁ÷£¬¶øNetscapeµÄÊÂ¼şÁ÷ÊÇÊÂ¼ş²¶»ñÁ÷
- 1¡¢ÊÂ¼şÃ°Åİ
- ÊÂ¼şÃ°Åİ£¬¼´ÊÂ¼ş×î¿ªÊ¼ÓÉ×î¾ßÌåµÄÔªËØ(ÎÄµµÖĞÇ¶Ì×²ã´Î×îÉîµÄÄÇ¸ö½Úµã)½ÓÊÕ£¬È»ºóÖğ¼¶ÏòÉÏ×ª²¥ÖÁ×î²»¾ßÌåµÄ½Úµã(ÎÄµµ)¡£
- 2¡¢ÊÂ¼ş²¶»ñ
- ÊÂ¼ş²¶»ñµÄË¼ÏëÊÇ²»Ì«¾ßÌåµÄ½ÚµãÓ¦¸Ã¸üÔç½ÓÊÕµ½ÊÂ¼ş£¬¶ø×î¾ßÌåµÄ½Úµã×îºó½ÓÊÕµ½ÊÂ¼ş¡£
- ¶ş¡¢ÊÂ¼ş´¦Àí³ÌĞò
- 1¡¢HTMLÊÂ¼ş´¦Àí³ÌĞò
- 2¡¢DOM0¼¶ÊÂ¼ş´¦Àí³ÌĞò
- 3¡¢DOM2¼¶ÊÂ¼ş´¦Àí³ÌĞò
- DOM2¼¶ÊÂ¼ş¶¨ÒåÁËÁ½¸ö·½·¨£ºÓÃÓÚ´¦ÀíÖ¸¶¨ºÍÉ¾³ıÊÂ¼ş´¦Àí³ÌĞòµÄ²Ù×÷£ºaddEventListener()ºÍremoveEventListener()¡£ËüÃÇ¶¼½ÓÊÕÈı¸ö²ÎÊı£ºÒª´¦ÀíµÄÊÂ¼şÃû¡¢×÷ÎªÊÂ¼ş´¦Àí³ÌĞòµÄº¯ÊıºÍÒ»¸ö²¼¶ûÖµ¡£
- 4¡¢IEÊÂ¼ş´¦Àí³ÌĞò
- attachEvent()Ìí¼ÓÊÂ¼ş
- detachEvent()É¾³ıÊÂ¼ş
- ÕâÁ½¸ö·½·¨½ÓÊÕÏàÍ¬µÄÁ½¸ö²ÎÊı£ºÊÂ¼ş´¦Àí³ÌĞòÃû³ÆÓëÊÂ¼ş´¦Àíº¯Êı
- 5¡¢¿çä¯ÀÀÆ÷µÄÊÂ¼ş´¦Àí³ÌĞò
- Èı¡¢ÊÂ¼ş¶ÔÏó
- ÊÂ¼ş¶ÔÏóevent
- 1¡¢DOMÖĞµÄÊÂ¼ş¶ÔÏó
- (1)¡¢type:»ñÈ¡ÊÂ¼şÀàĞÍ
- (2)¡¢target£ºÊÂ¼şÄ¿±ê
- (3)¡¢stopPropagation() ×èÖ¹ÊÂ¼şÃ°Åİ
- (4)¡¢preventDefault() ×èÖ¹ÊÂ¼şµÄÄ¬ÈÏĞĞÎª
- 2¡¢IEÖĞµÄÊÂ¼ş¶ÔÏó
- (1)¡¢type:»ñÈ¡ÊÂ¼şÀàĞÍ
- (2)¡¢srcElement£ºÊÂ¼şÄ¿±ê
- (3)¡¢cancelBubble=true×èÖ¹ÊÂ¼şÃ°Åİ
- (4)¡¢returnValue=false×èÖ¹ÊÂ¼şµÄÄ¬ÈÏĞĞÎª
+ ä¸€ã€äº‹ä»¶æµ
+ äº‹ä»¶æµæè¿°çš„æ˜¯ä»é¡µé¢ä¸­æ¥å—äº‹ä»¶çš„é¡ºåºã€‚
+ IEçš„äº‹ä»¶æµæ˜¯äº‹ä»¶å†’æ³¡æµï¼Œè€ŒNetscapeçš„äº‹ä»¶æµæ˜¯äº‹ä»¶æ•è·æµ
+ 1ã€äº‹ä»¶å†’æ³¡
+ äº‹ä»¶å†’æ³¡ï¼Œå³äº‹ä»¶æœ€å¼€å§‹ç”±æœ€å…·ä½“çš„å…ƒç´ (æ–‡æ¡£ä¸­åµŒå¥—å±‚æ¬¡æœ€æ·±çš„é‚£ä¸ªèŠ‚ç‚¹)æ¥æ”¶ï¼Œç„¶åé€çº§å‘ä¸Šè½¬æ’­è‡³æœ€ä¸å…·ä½“çš„èŠ‚ç‚¹(æ–‡æ¡£)ã€‚
+ 2ã€äº‹ä»¶æ•è·
+ äº‹ä»¶æ•è·çš„æ€æƒ³æ˜¯ä¸å¤ªå…·ä½“çš„èŠ‚ç‚¹åº”è¯¥æ›´æ—©æ¥æ”¶åˆ°äº‹ä»¶ï¼Œè€Œæœ€å…·ä½“çš„èŠ‚ç‚¹æœ€åæ¥æ”¶åˆ°äº‹ä»¶ã€‚
+ äºŒã€äº‹ä»¶å¤„ç†ç¨‹åº
+ 1ã€HTMLäº‹ä»¶å¤„ç†ç¨‹åº
+ 2ã€DOM0çº§äº‹ä»¶å¤„ç†ç¨‹åº
+ 3ã€DOM2çº§äº‹ä»¶å¤„ç†ç¨‹åº
+ DOM2çº§äº‹ä»¶å®šä¹‰äº†ä¸¤ä¸ªæ–¹æ³•ï¼šç”¨äºå¤„ç†æŒ‡å®šå’Œåˆ é™¤äº‹ä»¶å¤„ç†ç¨‹åºçš„æ“ä½œï¼šaddEventListener()å’ŒremoveEventListener()ã€‚å®ƒä»¬éƒ½æ¥æ”¶ä¸‰ä¸ªå‚æ•°ï¼šè¦å¤„ç†çš„äº‹ä»¶åã€ä½œä¸ºäº‹ä»¶å¤„ç†ç¨‹åºçš„å‡½æ•°å’Œä¸€ä¸ªå¸ƒå°”å€¼ã€‚
+ 4ã€IEäº‹ä»¶å¤„ç†ç¨‹åº
+ attachEvent()æ·»åŠ äº‹ä»¶
+ detachEvent()åˆ é™¤äº‹ä»¶
+ è¿™ä¸¤ä¸ªæ–¹æ³•æ¥æ”¶ç›¸åŒçš„ä¸¤ä¸ªå‚æ•°ï¼šäº‹ä»¶å¤„ç†ç¨‹åºåç§°ä¸äº‹ä»¶å¤„ç†å‡½æ•°
+ 5ã€è·¨æµè§ˆå™¨çš„äº‹ä»¶å¤„ç†ç¨‹åº
+ ä¸‰ã€äº‹ä»¶å¯¹è±¡
+ äº‹ä»¶å¯¹è±¡event
+ 1ã€DOMä¸­çš„äº‹ä»¶å¯¹è±¡
+ (1)ã€type:è·å–äº‹ä»¶ç±»å‹
+ (2)ã€targetï¼šäº‹ä»¶ç›®æ ‡
+ (3)ã€stopPropagation() é˜»æ­¢äº‹ä»¶å†’æ³¡
+ (4)ã€preventDefault() é˜»æ­¢äº‹ä»¶çš„é»˜è®¤è¡Œä¸º
+ 2ã€IEä¸­çš„äº‹ä»¶å¯¹è±¡
+ (1)ã€type:è·å–äº‹ä»¶ç±»å‹
+ (2)ã€srcElementï¼šäº‹ä»¶ç›®æ ‡
+ (3)ã€cancelBubble=trueé˜»æ­¢äº‹ä»¶å†’æ³¡
+ (4)ã€returnValue=falseé˜»æ­¢äº‹ä»¶çš„é»˜è®¤è¡Œä¸º
 */
 
-/*¿çä¯ÀÀÆ÷ÊÂ¼ş´¦Àí³ÌĞò*/
+/*è·¨æµè§ˆå™¨äº‹ä»¶å¤„ç†ç¨‹åº*/
 var eventUtil = {
-    /*°ó¶¨ÊÂ¼ş*/
+    /*ç»‘å®šäº‹ä»¶*/
     addHandler: function (element, type, method) {
         if (element.addEventListener) {
             element.addEventListener(type, method, false);
         } else if (element.attachEvent) {
             element.attachEvent('on'+type, method);
         } else {
-            /*Dom 0¼¶ÊÂ¼ş´¦Àí³ÌĞò*/
-            /*jsÖĞ£¬ËùÓĞµãºÅÁ¬½ÓµÄÊÂ¼ş´¦Àí³ÌĞò¶¼¿ÉÒÔÊ¹ÓÃÖĞÀ¨ºÅÀ´´úÌæ£¬ ¼´£º*/
+            /*Dom 0çº§äº‹ä»¶å¤„ç†ç¨‹åº*/
+            /*jsä¸­ï¼Œæ‰€æœ‰ç‚¹å·è¿æ¥çš„äº‹ä»¶å¤„ç†ç¨‹åºéƒ½å¯ä»¥ä½¿ç”¨ä¸­æ‹¬å·æ¥ä»£æ›¿ï¼Œ å³ï¼š*/
             /*element.onclick === element['onclick']*/
             element['on'+type] = method;
         }
     },
-    /*É¾³ı°ó¶¨ÊÂ¼ş*/
+    /*åˆ é™¤ç»‘å®šäº‹ä»¶*/
     removeHandler: function (element, type, method) {
         if (element.removeEventListener) {
             element.removeEventListener(type, method, false);
         } else if (element.dettachEvent) {
             element.dettachEvent('on'+type, method);
         } else {
-            /*Dom 0¼¶ÊÂ¼ş´¦Àí³ÌĞò*/
-            /*jsÖĞ£¬ËùÓĞµãºÅÁ¬½ÓµÄÊÂ¼ş´¦Àí³ÌĞò¶¼¿ÉÒÔÊ¹ÓÃÖĞÀ¨ºÅÀ´´úÌæ£¬ ¼´£º*/
+            /*Dom 0çº§äº‹ä»¶å¤„ç†ç¨‹åº*/
+            /*jsä¸­ï¼Œæ‰€æœ‰ç‚¹å·è¿æ¥çš„äº‹ä»¶å¤„ç†ç¨‹åºéƒ½å¯ä»¥ä½¿ç”¨ä¸­æ‹¬å·æ¥ä»£æ›¿ï¼Œ å³ï¼š*/
             /*element.onclick === element['onclick']*/
             element['on'+type] = null;
         }
     },
 
-    /*»ñÈ¡ÊÂ¼ş*/
+    /*è·å–äº‹ä»¶*/
     getEvent: function (event) {
         return event? event: window.event;
     },
 
-    /*»ñÈ¡ÊÂ¼şÀàĞÍ*/
+    /*è·å–äº‹ä»¶ç±»å‹*/
     getType: function (event) {
         return event.type;
     },
 
-    /*»ñÈ¡ÊÂ¼şÄ¿±ê¶ÔÏótarget*/
+    /*è·å–äº‹ä»¶ç›®æ ‡å¯¹è±¡target*/
     getTarget: function (event) {
         return event.target || event.srcElement;
     },
 
-    /*È¡ÏûÊÂ¼şÄ¬ÈÏĞĞÎª*/
+    /*å–æ¶ˆäº‹ä»¶é»˜è®¤è¡Œä¸º*/
     preventDefault: function (event) {
         var event = this.getEvent(event);
         if (event.preventDefault) {
@@ -89,7 +89,7 @@ var eventUtil = {
         }
     },
 
-    /*È¡ÏûÊÂ¼şÃ°Åİ*/
+    /*å–æ¶ˆäº‹ä»¶å†’æ³¡*/
     stopPropagation: function (event) {
         var event = this.getEvent(event);
         if (event.stopPropagation) {
@@ -99,7 +99,7 @@ var eventUtil = {
         }
     },
 
-    /*Êó±ê°´ÏÂÊÂ¼ş*/
+    /*æŒ‰ä¸‹å›è½¦é”®äº‹ä»¶*/
     enterKeyPress: function (event, handler) {
         var event = this.getEvent(event);
         if (event.keyCode == 13) {
@@ -109,15 +109,15 @@ var eventUtil = {
         }
     },
 
-    /*»ñÈ¡Êó±ê¹ö¶¯·½Ïò
+    /*è·å–é¼ æ ‡æ»šåŠ¨æ–¹å‘
     * ret:
-    *     trueÎªÏòÏÂ
-    *     falseÎªÏòÉÏ*/
+    *     trueä¸ºå‘ä¸‹
+    *     falseä¸ºå‘ä¸Š*/
     getScrollDirection: function (e) {
         var event = this.getEvent(e);
         this.preventDefault(event);
 
-        var value = event.originalEvent.wheelDelta || -event.originalEvent.detail,//-120£¬ 3
+        var value = event.originalEvent.wheelDelta || -event.originalEvent.detail,//-120ï¼Œ 3
             delta = Math.max(-1, Math.min(1, value));
 
         return delta < 0? true: false;

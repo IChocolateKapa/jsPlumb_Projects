@@ -104,13 +104,51 @@ jsPlumb.ready(function () {
     });
 
 
-
     jsPlumb.fire("jsPlumbDemoLoaded", instance);
 
+    var orgPosX, orgPosY;
+    $("#dragRect").draggable({
+        start: function (event) {
+            orgPosX = event.pageX;
+            orgPosY = event.pageY;
 
-    $("#dragRect").draggable(/*{
-        'containment': 'parent'
-    }*/)
+            console.log("拖动起始点坐标是： (", orgPosX, ", ", orgPosY, ")");
+        },
+        drag: function (event , ui) {
+            console.log("拖动过程中能不能记起起始点坐标是： (", orgPosX, ", ", orgPosY, ")");
+
+            var realPosY = event.pageY,
+                realPosX = event.pageX;
+
+            var moveX = realPosX - orgPosX,
+                moveY = realPosY - orgPosY;
+
+            var curZoom = instance.getZoom();
+
+            console.log("实时移动的距离是：moveX=", moveX,  ", moveY=", moveY);
+
+            var elePosX = $("#canvas").position().left,
+                elePosY = $("#canvas").position().top;
+
+            var  disX = -(elePosX + moveX/scale),
+                disY = -(elePosY + moveX/scale);
+
+            /**
+             * transformOrigin非常重要非常重要非常重要
+             * */
+            $("#canvas").css({
+                "transform": "translate(" + disX + "px, " + disY + "px) scale(" + curZoom + ")",
+                "-webkit-transform": "translate(" + disX + "px, " + disY + "px) scale(" + curZoom + ")",
+                "-moz-transform": "translate(" + disX + "px, " + disY + "px) scale(" + curZoom + ")",
+                "-ms-transform": "translate(" + disX + "px, " + disY + "px) scale(" + curZoom + ")",
+                "transformOrigin": "left top",
+                "-webkit-transformOrigin": "left top",
+                "-moz-transformOrigin": "left top",
+                "-ms-transformOrigin": "left top"
+            });
+
+        }
+    })
 
 });
 

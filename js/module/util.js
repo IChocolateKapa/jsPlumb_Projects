@@ -266,7 +266,8 @@ var jsPmbUtil = {
 
         console.log("after zoom, position.left: ", $("#canvas").position().left,  " position.top: ", $("#canvas").position().top)
 
-        this.updateMiniMap(instance, el, [1-transformOrigin[0], 1-transformOrigin[1]]);
+        this.updateMiniMap(instance, el, [transformOrigin[0], transformOrigin[1]]);
+        //this.updateMiniMap(instance, el, [1-transformOrigin[0], 1-transformOrigin[1]]);
 
     },
 

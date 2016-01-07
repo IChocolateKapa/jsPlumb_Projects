@@ -66,7 +66,7 @@ var eventUtil = {
 
     /*获取事件*/
     getEvent: function (event) {
-        return event?event:window.event;
+        return event? event: window.event;
     },
 
     /*获取事件类型*/
@@ -81,6 +81,7 @@ var eventUtil = {
 
     /*取消事件默认行为*/
     preventDefault: function (event) {
+        var event = this.getEvent(event);
         if (event.preventDefault) {
             event.preventDefault();
         } else {
@@ -113,7 +114,7 @@ var eventUtil = {
     *     true为向下
     *     false为向上*/
     getScrollDirection: function (e) {
-        event = this.getEvent(e);
+        var event = this.getEvent(e);
         this.preventDefault(event);
 
         var value = event.originalEvent.wheelDelta || -event.originalEvent.detail,//-120， 3

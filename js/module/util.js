@@ -261,12 +261,13 @@ var jsPmbUtil = {
 
         el.style["transform"] = s;
         el.style["transformOrigin"] = oString;
-        //el.style["width"] = $(".main_wrap_right").width() + "px";
-        //el.style["height"] = $(".main_wrap_right").height() + "px";
 
         instance.setZoom(zoom, true);
 
         console.log("after zoom, position.left: ", $("#canvas").position().left,  " position.top: ", $("#canvas").position().top)
+
+        this.updateMiniMap(instance, el, [1-transformOrigin[0], 1-transformOrigin[1]]);
+
     },
 
     MouseWheelHandler: function (e, instance) {
@@ -275,19 +276,28 @@ var jsPmbUtil = {
             curZoom = instance.getZoom(),
             self = this;
 
+        var event = eventUtil.getEvent(e);
+
+        var relativeX = event.pageX - $("#canvas").offset().left,
+            relativeY = event.pageY = $("#canvas").offset().top;
+
+        var perX = 1 - relativeX / $("#canvas").width(),
+            perY = 1 - relativeY / $("#canvas").height();
+
+
+
         console.log("before zooming, curZoom is : ", instance.getZoom());
 
         /*不能再缩小了...要不看不见了*/
         if (curZoom < 0.1) {
             return;
         }
-        if (isNext) {//
-            self.setContainerZoom(curZoom - 0.1, instance, [curZoom, curZoom], $canvas[0]);
+        if (isNext) {//[curZoom, curZoom]
+            self.setContainerZoom(curZoom - 0.1, instance, [perX, perY], $canvas[0]);
         } else {
-            self.setContainerZoom(curZoom + 0.1, instance, [curZoom, curZoom], $canvas[0]);
+            self.setContainerZoom(curZoom + 0.1, instance, [perX, perY], $canvas[0]);
         }
 
-        //this.updateMiniMap(instance, instance.getZoom());
         console.log("after zooming, curZoom is : ", instance.getZoom());
     },
 
@@ -427,18 +437,27 @@ var jsPmbUtil = {
      * 根据当前缩放级别，设置miniMap的相应缩放
      * 1. 要按比例，需要canvas的宽高知道后， 根据比例生成一个miniMap的组件， 不然组件位置无法控制
      * */
-    updateMiniMap: function (instance, ele, zoom, isNew) {
+    updateMiniMap: function (instance, ele, transformOrigin, isNew) {
 
 
-        var curZoom = zoom || instance.getZoom();
+        console.log("in miniMap, transformOrigin: ", transformOrigin)
+        var curZoom = instance.getZoom();
+        var transOrg = transformOrigin || [0.5, 0.5];
+        var oString = (transOrg[0] * 100) + "% " + (transOrg[1] * 100) + "%";
 
-        var setZ = curZoom > 1? curZoom: 1+curZoom;
+        console.log("oString: ", oString);
+
+        var setZ = 1/curZoom;
 
         $("#dragRect").css({
             "transform": "scale("+setZ+")",
             "-webkit-transform": "scale("+setZ+")",
             "-moz-transform": "scale("+setZ+")",
-            "ms-transform": "scale("+setZ+")"
+            "ms-transform": "scale("+setZ+")",
+            "transform-origin": oString,
+            "-webkit-transform-origin": oString,
+            "-moz-transform-origin": oString,
+            "-ms-transform-origin": oString,
         })
     },
 

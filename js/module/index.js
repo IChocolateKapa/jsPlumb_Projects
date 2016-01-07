@@ -106,11 +106,14 @@ jsPlumb.ready(function () {
 
     jsPlumb.fire("jsPlumbDemoLoaded", instance);
 
-    var orgPosX, orgPosY;
+    var orgPosX, orgPosY, elePosX, elePosY;
     $("#dragRect").draggable({
         start: function (event) {
             orgPosX = event.pageX;
             orgPosY = event.pageY;
+
+            elePosX = $("#canvas").position().left;
+            elePosY = $("#canvas").position().top;
 
             console.log("拖动起始点坐标是： (", orgPosX, ", ", orgPosY, ")");
         },
@@ -127,11 +130,10 @@ jsPlumb.ready(function () {
 
             console.log("实时移动的距离是：moveX=", moveX,  ", moveY=", moveY);
 
-            var elePosX = $("#canvas").position().left,
-                elePosY = $("#canvas").position().top;
 
-            var  disX = -(elePosX + moveX/scale),
-                disY = -(elePosY + moveX/scale);
+
+            var disX = elePosX - moveX/scale,
+                disY = elePosY - moveY/scale;
 
             /**
              * transformOrigin非常重要非常重要非常重要
@@ -173,8 +175,9 @@ $(function () {
                         });
 
             ret = false;
+        } else {
+            ret = true;
         }
-        ret = true;
         eventUtil.preventDefault(e);
         return ret;
     });

@@ -114,5 +114,35 @@ jsPlumb.ready(function () {
 
 });
 
+$(function () {
+    document.oncontextmenu = function() {return false;};
 
+    $("#container").mousedown(function(e){
+
+        var event = eventUtil.getEvent(e);
+        var ret;
+        if(event.button == 2) {
+
+            console.log('Right mouse button!');
+
+            var curPosX = event.pageX,
+                curPosY = event.pageY;
+
+            $(".flyRect").fadeIn(500)
+                        .animate({
+                            'top': curPosY + "px",
+                            'left': curPosX + "px"
+                        });
+
+            ret = false;
+        }
+        ret = true;
+        eventUtil.preventDefault(e);
+        return ret;
+    });
+
+    $(document).click(function () {
+        $(".flyRect").fadeOut(500);
+    })
+})
 

@@ -364,33 +364,55 @@ var jsPmbUtil = {
 
                 //var moveX = (elePosX + (curPosX - orgPosX)) * curZoom,
                 //    moveY = (elePosY + (curPosY - orgPosY)) * curZoom;
-                var moveX = (elePosX + (curPosX - orgPosX)),
-                    moveY = (elePosY + (curPosY - orgPosY));
+                var moveX = curPosX - orgPosX,
+                    moveY = curPosY - orgPosY,
+                    disX = elePosX + moveX,
+                    disY = elePosY + moveY;
 
 
-                console.log("moveX=", moveX,  ", moveY=", moveY);
+                //console.log("moveX=", moveX,  ", moveY=", moveY);
 
                 /**
                  * transformOrigin非常重要非常重要非常重要
                  * */
                 $("#canvas").css({
-                    "transform": "translate(" + moveX + "px, " + moveY + "px) scale(" + curZoom + ")",
-                    "-webkit-transform": "translate(" + moveX + "px, " + moveY + "px) scale(" + curZoom + ")",
-                    "-moz-transform": "translate(" + moveX + "px, " + moveY + "px) scale(" + curZoom + ")",
-                    "-ms-transform": "translate(" + moveX + "px, " + moveY + "px) scale(" + curZoom + ")",
+                    "transform": "translate(" + disX + "px, " + disY + "px) scale(" + curZoom + ")",
+                    "-webkit-transform": "translate(" + disX + "px, " + disY + "px) scale(" + curZoom + ")",
+                    "-moz-transform": "translate(" + disX + "px, " + disY + "px) scale(" + curZoom + ")",
+                    "-ms-transform": "translate(" + disX + "px, " + disY + "px) scale(" + curZoom + ")",
                     "transformOrigin": "left top",
                     "-webkit-transformOrigin": "left top",
                     "-moz-transformOrigin": "left top",
                     "-ms-transformOrigin": "left top"
-                })
+                });
 
                 //miniMap的拖块也要相应位移
+                var rectPosX = $("#dragRect").position().left,
+                    rectPosY = $("#dragRect").position().top,
+                    curelePosX = $("#canvas").position().left,
+                    curelePosY = $("#canvas").position().top,
+                    //disXScale = rectPosX + moveX,
+                    //disYScale = rectPosY + moveY;
+                    //disXScale = disX*scale,
+                    //disYScale = disY*scale;
+                    disXScale = curelePosX*scale,
+                    disYScale = curelePosX*scale;
+                    //disXScale = rectPosX - moveX*scale,
+                    //disYScale = rectPosY - moveY*scale;
+
+                console.log("disXScale=",disXScale, ", disYScale=", disYScale);
+
+                /*$("#dragRect").css({
+                    "transform": "translate(-" + disXScale + "px, -" + disYScale + "px)",
+                    "-webkit-transform": "translate(-" + disXScale + "px, -" + disYScale + "px)",
+                    "-moz-transform": "translate(-" + disXScale + "px, " + disYScale + "px)",
+                    "-ms-transform": "translate(-" + disXScale + "px, -" + disYScale + "px)",
+                });*/
+
                 $("#dragRect").css({
-                    "transform": "translate(-" + moveX*scale + "px, -" + moveY*scale + "px)",
-                    "-webkit-transform": "translate(-" + moveX*scale + "px, -" + moveY*scale + "px)",
-                    "-moz-transform": "translate(-" + moveX*scale + "px, " + moveY*scale + "px)",
-                    "-ms-transform": "translate(-" + moveX*scale + "px, -" + moveY*scale + "px)",
-                });
+                    "top": "-" + disYScale + "px",
+                    "left": "-" + disXScale + "px"
+                })
 
             });
 

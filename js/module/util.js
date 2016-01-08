@@ -393,10 +393,10 @@ var jsPmbUtil = {
                     "-webkit-transform": "translate(" + disX + "px, " + disY + "px) scale(" + curZoom + ")",
                     "-moz-transform": "translate(" + disX + "px, " + disY + "px) scale(" + curZoom + ")",
                     "-ms-transform": "translate(" + disX + "px, " + disY + "px) scale(" + curZoom + ")",
-                    "transformOrigin": "left top",
-                    "-webkit-transformOrigin": "left top",
-                    "-moz-transformOrigin": "left top",
-                    "-ms-transformOrigin": "left top"
+                    "transform-origin": "left top",
+                    "-webkit-transform-origin": "left top",
+                    "-moz-transform-origin": "left top",
+                    "-ms-transform-origin": "left top"
                 });
 
                 //miniMap的拖块也要相应位移

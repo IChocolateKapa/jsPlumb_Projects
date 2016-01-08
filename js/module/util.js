@@ -282,8 +282,10 @@ var jsPmbUtil = {
         var relativeX = event.pageX - $("#canvas").offset().left,
             relativeY = event.pageY = $("#canvas").offset().top;
 
-        var perX = 1 - relativeX / $("#canvas").width(),
-            perY = 1 - relativeY / $("#canvas").height();
+        var perX = relativeX / $("#canvas").width(),
+            perY = relativeY / $("#canvas").height();
+        //var perX = 1 - relativeX / $("#canvas").width(),
+        //    perY = 1 - relativeY / $("#canvas").height();
 
 
 

@@ -104,11 +104,18 @@ var jsPmbUtil = {
         self.addRectToMap(el);
     },
 
-    addNode: function (instance, x, y, name, mid, w, h) {
+    addNode: function (instance, config) {
+
+        var offsetLeft = config.left,
+            offsetTop = config.top,
+            name = config.text,
+            isReload = config.isReload || false,
+            id = config.mid || jsPlumbUtil.uuid();
+
         var d = document.createElement("div");
-        var id = mid || jsPlumbUtil.uuid();
         d.className = "w";
         d.id = id;
+
         var selfName = name || id.substring(0, 7);
         var state = "<input type='text' placeholder='输入节点名称' class='stateName' value='" + selfName + "'/>";
         $(state).focus();
@@ -120,42 +127,54 @@ var jsPmbUtil = {
         });
         d.innerHTML =  "<div class=\"ep\">" + state + "</div>";
 
-        /*获取此时canvas距离container的位移*/
-        var posY = $("#canvas").position().top,
-            posX = $("#canvas").position().left;
 
-        d.style.left = x - posX + "px";
-        d.style.top = y - posY + "px";
+        if (isReload) {
+            d.style.left = offsetLeft + "px";
+            d.style.top = offsetTop + "px";
+        } else {
+            /*获取此时canvas距离container的位移*/
+            var posY = $("#canvas").position().top,
+                posX = $("#canvas").position().left;
+
+            d.style.left = offsetLeft - posX + "px";
+            d.style.top = offsetTop - posY + "px";
+        }
+
+        ///*can't figure out why there is a minus Pos......*/
+
         instance.getContainer().appendChild(d);
         this.initNode(instance, d);
         return d;
     },
 
     getAllNodes: function (instance) {
-            /*获取所有节点*/
-            var nodeList = instance.getSelector(".w");
-            for (var i = 0; i < nodeList.length; i++) {
-                var elHeight = nodeList[i].offsetHeight,
-                    elWidth = nodeList[i].offsetWidth,
-                    elTop = nodeList[i].offsetTop,
-                    elLeft = nodeList[i].offsetLeft,
-                    id = nodeList[i].id,
-                    text = nodeList[i].textContent,
-                    elProps = {};
+        /*获取所有节点*/
+        var nodeList = instance.getSelector(".w");
 
-                elProps = {
-                    width: elWidth,
-                    height: elHeight,
-                    top: elTop,
-                    left: elLeft,
-                    id: id,
-                    text: text
-                };
-                //nodeBasket.addItem(nodeList[i]);
-                nodeBasket.addItem(elProps);
-            }
-            return this;
-        },
+        console.log(nodeList);
+
+        for (var i = 0; i < nodeList.length; i++) {
+            var elHeight = $(nodeList[i]).offsetHeight,
+                elWidth = nodeList[i].offsetWidth,
+                elTop = nodeList[i].offsetTop,
+                elLeft = nodeList[i].offsetLeft,
+                id = nodeList[i].id,
+                text = nodeList[i].textContent,
+                elProps = {};
+
+            elProps = {
+                width: elWidth,
+                height: elHeight,
+                top: elTop,
+                left: elLeft,
+                id: id,
+                text: text
+            };
+            //nodeBasket.addItem(nodeList[i]);
+            nodeBasket.addItem(elProps);
+        }
+        return this;
+    },
 
     getAllConnections: function (instance) {
         //获取所有连接
@@ -204,7 +223,7 @@ var jsPmbUtil = {
             .removeAllNodes(instance);
 
         /*暂时先清空*/
-        $canvas.empty();
+        $("#canvas").empty();
         console.log("in saving lists.length : ", connectionBasket.getItems().length);
 
     },
@@ -215,7 +234,13 @@ var jsPmbUtil = {
 
         console.log("nodes.length : ", nodes.length);
         for (var i = 0; i < nodes.length; i++){
-            var newCreated = this.addNode(instance, nodes[i].left, nodes[i].top, nodes[i].text, nodes[i].id, nodes[i].width, nodes[i].height);
+            var newCreated = this.addNode(instance, {
+                'left': nodes[i].left,
+                'top': nodes[i].top,
+                'text': nodes[i].text,
+                'mid': nodes[i].id,
+                'isReload': true
+            });
             this.initNode(instance, newCreated);
         }
 

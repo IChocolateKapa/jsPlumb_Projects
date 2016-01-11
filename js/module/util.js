@@ -374,8 +374,11 @@ var jsPmbUtil = {
                 var $Item =  ui.draggable;
                 var $itemClone = $Item.clone().addClass("w");
 
-                var t = event.pageY - event.offsetY,
-                    l = event.pageX - event.offsetX - $(".main_wrap_left").width();
+                //var t = event.offsetY,
+                //    l = event.offsetX;
+                /*如果容器有所拖动的话， 要减去容器与外层容器的位移量*/
+                var t = event.pageY - event.offsetY - $("#canvas").position().top,
+                    l = event.pageX - event.offsetX - $(".main_wrap_left").width() - $("#canvas").position().left;
 
                 //要获取当前canvas的位置与container的距离
 

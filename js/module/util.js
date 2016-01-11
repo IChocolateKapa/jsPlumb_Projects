@@ -433,20 +433,20 @@ var jsPmbUtil = {
                 });
 
                 //miniMap的拖块也要相应位移
-                var rectPosX = $("#dragRect").position().left,
+               /* var rectPosX = $("#dragRect").position().left,
                     rectPosY = $("#dragRect").position().top,
                     curelePosX = $("#canvas").position().left,
-                    curelePosY = $("#canvas").position().top,
+                    curelePosY = $("#canvas").position().top,*/
                     //disXScale = rectPosX + moveX,
                     //disYScale = rectPosY + moveY;
                     //disXScale = disX*scale,
                     //disYScale = disY*scale;
-                    disXScale = -curelePosX*scale,
-                    disYScale = -curelePosX*scale;
+        /*            disXScale = -curelePosX*scale,
+                    disYScale = -curelePosX*scale;*/
                     //disXScale = rectPosX - moveX*scale,
                     //disYScale = rectPosY - moveY*scale;
 
-                console.log("disXScale=",disXScale, ", disYScale=", disYScale);
+                //console.log("disXScale=",disXScale, ", disYScale=", disYScale);
 
                 /*$("#dragRect").css({
                     "transform": "translate(-" + disXScale + "px, -" + disYScale + "px)",

@@ -39,10 +39,10 @@ jsPlumb.ready(function () {
 
 
     /*在容器中需要取消鼠标滚轮的事件冒泡*/
-    $("#container").on("mousewheel DOMMouseScroll", function (e) {
+    /*$("#container").on("mousewheel DOMMouseScroll", function (e) {
         eventUtil.stopPropagation(e);
         jsPmbUtil.MouseWheelHandler(e, instance);
-    });
+    });*/
 
 
     // bind click listener; delete connections on click

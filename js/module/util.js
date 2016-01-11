@@ -279,11 +279,17 @@ var jsPmbUtil = {
 
         var event = eventUtil.getEvent(e);
 
-        var relativeX = event.pageX - $("#canvas").offset().left,
-            relativeY = event.pageY = $("#canvas").offset().top;
+        var relativeX = event.pageX - $("#container").offset().left,
+            relativeY = event.pageY - $("#container").offset().top;
+/*        var relativeX = event.pageX - $("#canvas").offset().left,
+            relativeY = event.pageY = $("#canvas").offset().top;*/
 
-        var perX = relativeX / $("#canvas").width(),
+        var perX = relativeX * curZoom / $("#canvas").width() * curZoom,
             perY = relativeY / $("#canvas").height();
+        //var perX = relativeX * curZoom,
+        //    perY = relativeY * curZoom;
+        //var perX = relativeX / $("#canvas").width()*curZoom,
+        //    perY = relativeY / $("#canvas").height()*curZoom;
         //var perX = 1 - relativeX / $("#canvas").width(),
         //    perY = 1 - relativeY / $("#canvas").height();
 
@@ -291,6 +297,7 @@ var jsPmbUtil = {
 
         console.log("before zooming, curZoom is : ", instance.getZoom());
 
+        console.log("perX, perY: ", perX, ", ", perY);
         /*不能再缩小了...要不看不见了*/
         if (curZoom < 0.1) {
             return;
@@ -338,7 +345,7 @@ var jsPmbUtil = {
                 $("#panel").html(ss);
             }
         });
-        $canvas.droppable({
+        $("#canvas").droppable({
             hoverClass: "hover-class-test",
             accept: ".left_block",
             drop: function(event, ui) {
@@ -349,7 +356,25 @@ var jsPmbUtil = {
                 var t = event.pageY - event.offsetY,
                     l = event.pageX - event.offsetX - $(".main_wrap_left").width();
 
-                $itemClone.css({"top": t, "left": l}).appendTo($canvas);
+                $itemClone.css({"top": t, "left": l}).appendTo($("#canvas"));
+
+                self.initNode(instance, $itemClone);
+            }
+        });
+        $("#container").droppable({
+            hoverClass: "hover-class-test",
+            accept: ".left_block",
+            drop: function(event, ui) {
+
+                var $Item =  ui.draggable;
+                var $itemClone = $Item.clone().addClass("w");
+
+                var t = event.pageY - event.offsetY,
+                    l = event.pageX - event.offsetX - $(".main_wrap_left").width();
+
+                //要获取当前canvas的位置与container的距离
+
+                $itemClone.css({"top": t, "left": l}).appendTo($("#canvas"));
 
                 self.initNode(instance, $itemClone);
             }
@@ -422,10 +447,10 @@ var jsPmbUtil = {
                     "-ms-transform": "translate(-" + disXScale + "px, -" + disYScale + "px)",
                 });*/
 
-                $("#dragRect").css({
+                /*$("#dragRect").css({
                     "top": disYScale + "px",
                     "left": disXScale + "px"
-                })
+                })*/
 
             });
 

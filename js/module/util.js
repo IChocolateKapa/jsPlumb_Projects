@@ -77,6 +77,8 @@ var jsPmbUtil = {
         instance.on(el, "click", function (event) {
             //注意在建立连接完成时也会触发这个事件
             console.log("click node target: ", eventUtil.getTarget(event));
+            eventUtil.stopPropagation(event);
+            eventUtil.preventDefault(event);
         });
         /**
          * 给新添加的节点添加绑定事件
@@ -98,10 +100,10 @@ var jsPmbUtil = {
         // this is not part of the core demo functionality;
         // it is a means for the Toolkit edition's wrapped
         // version of this demo to find out about new nodes being added.
-        //instance.fire("jsPlumbDemoNodeAdded", el);
+        instance.fire("jsPlumbDemoNodeAdded", el);
 
 
-        self.addRectToMap(el);
+        //self.addRectToMap(el);
     },
 
     addNode: function (instance, config) {
@@ -114,6 +116,7 @@ var jsPmbUtil = {
 
         var d = document.createElement("div");
         d.className = "w";
+        //d.classList = ['w', 'adb'];
         d.id = id;
 
         var selfName = name || id.substring(0, 7);
@@ -121,7 +124,7 @@ var jsPmbUtil = {
         $(state).focus();
         $(state).keyup(function(e) {
             if (e.keyCode === 13) {
-                console.log("this.value: ", this.value);
+                //console.log("this.value: ", this.value);
                 $(this).parent().text(this.value);
             }
         });
@@ -233,7 +236,7 @@ var jsPmbUtil = {
             links = connectionBasket.getItems();
 
         console.log("nodes.length : ", nodes.length);
-        for (var i = 0; i < nodes.length; i++){
+        for (var i = 0; i < nodes.length; i++) {
             var newCreated = this.addNode(instance, {
                 'left': nodes[i].left,
                 'top': nodes[i].top,

@@ -119,8 +119,13 @@ var jsPmbUtil = {
             }
         });
         d.innerHTML =  "<div class=\"ep\">" + state + "</div>";
-        d.style.left = x + "px";
-        d.style.top = y + "px";
+
+        /*获取此时canvas距离container的位移*/
+        var posY = $("#canvas").position().top,
+            posX = $("#canvas").position().left;
+
+        d.style.left = x - posX + "px";
+        d.style.top = y - posY + "px";
         instance.getContainer().appendChild(d);
         this.initNode(instance, d);
         return d;

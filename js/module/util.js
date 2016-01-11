@@ -110,17 +110,15 @@ var jsPmbUtil = {
 
         var offsetLeft = config.left,
             offsetTop = config.top,
-            name = config.text,
+            text = config.text || id.substring(0, 7),
             isReload = config.isReload || false,
             id = config.mid || jsPlumbUtil.uuid();
 
         var d = document.createElement("div");
         d.className = "w";
-        //d.classList = ['w', 'adb'];
         d.id = id;
 
-        var selfName = name || id.substring(0, 7);
-        var state = "<input type='text' placeholder='输入节点名称' class='stateName' value='" + selfName + "'/>";
+        var state = "<input type='text' placeholder='输入节点名称' class='stateName' value='" + text + "'/>";
         $(state).focus();
         $(state).keyup(function(e) {
             if (e.keyCode === 13) {

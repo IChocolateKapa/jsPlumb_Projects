@@ -422,8 +422,8 @@ var jsPmbUtil = {
 
             var $moveRect = $('<div class="moveRect"></div>');
             $moveRect.css({
-                'top': orgMpx + "px",
-                'left': orgMpy + "px"
+                'top': orgPosX + "px",
+                'left': orgPosY + "px"
             }).appendTo($("#canvas"));
             //记下初始元素位置
             //bug: zoom后元素的位置不稳定
@@ -443,10 +443,28 @@ var jsPmbUtil = {
                     disX = elePosX + moveX,
                     disY = elePosY + moveY;
 
-                $moveRect.css({
-                    'height': Math.abs(moveY) + "px",
-                    'width': Math.abs(moveX) + "px"
-                })
+                if (moveX < 0 ) {
+                    $moveRect.css({
+                        'height': Math.abs(moveY) + "px",
+                        'width': Math.abs(moveX) + "px",
+                        'transform': 'rotateX(-90deg)',
+                        'transform-origin': 'bottom'
+                    })
+                } else if (moveY < 0) {
+                    $moveRect.css({
+                        'height': Math.abs(moveY) + "px",
+                        'width': Math.abs(moveX) + "px",
+                        'transform': 'rotateY(-90deg)',
+                        'transform-origin': 'right'
+                    })
+                } else {
+                    $moveRect.css({
+                        'height': Math.abs(moveY) + "px",
+                        'width': Math.abs(moveX) + "px",
+                    })
+                }
+
+
 
 
 

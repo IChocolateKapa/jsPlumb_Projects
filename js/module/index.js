@@ -38,7 +38,10 @@ jsPlumb.ready(function () {
     });
 
 
-    /*在容器中需要取消鼠标滚轮的事件冒泡*/
+    /**
+     * 鼠标滚轮滚动时进行缩放 --暂时禁掉
+     * 在容器中需要取消鼠标滚轮的事件冒泡
+     * */
     /*$("#container").on("mousewheel DOMMouseScroll", function (e) {
         eventUtil.stopPropagation(e);
         jsPmbUtil.MouseWheelHandler(e, instance);
@@ -72,6 +75,7 @@ jsPlumb.ready(function () {
         eventUtil.stopPropagation();
         eventUtil.preventDefault();
     });*/
+
     /**
      * 双击删除连接， 但是这样会触发双击 增加节点 的事件， 即使阻止冒泡，也没有解决
      * 暂时解决办法是： 给连接绑单击事件， 不与最上层容器的双击事件冒泡冲突
@@ -91,7 +95,6 @@ jsPlumb.ready(function () {
         eventUtil.stopPropagation();
         eventUtil.preventDefault();
         return ret;
-        //return true
     });
 
 
@@ -117,14 +120,13 @@ jsPlumb.ready(function () {
         //conn是当前的具体连接， 能够获取连接的source target
         console.log("drag Done!");
         console.log("conn ： ", conn);
-        //console.log("uuid of conn is : ", conn.getUuids());
 
         eventUtil.preventDefault();
         eventUtil.stopPropagation();
     });
 
 
-    //jsPlumb.fire("jsPlumbDemoLoaded", instance);
+    jsPlumb.fire("jsPlumbDemoLoaded", instance);
 
     var orgPosX, orgPosY, elePosX, elePosY;
     $("#dragRect").draggable({
@@ -172,7 +174,7 @@ jsPlumb.ready(function () {
             });
 
         }
-    })
+    });
 
 });
 

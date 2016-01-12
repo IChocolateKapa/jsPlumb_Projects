@@ -170,7 +170,7 @@ var jsPmbUtil = {
                 height: elHeight,
                 top: elTop,
                 left: elLeft,
-                id: id,
+                mid: id,
                 text: text
             };
             //nodeBasket.addItem(nodeList[i]);
@@ -237,13 +237,7 @@ var jsPmbUtil = {
 
         console.log("nodes.length : ", nodes.length);
         for (var i = 0; i < nodes.length; i++) {
-            var newCreated = this.addNode(instance, {
-                'left': nodes[i].left,
-                'top': nodes[i].top,
-                'text': nodes[i].text,
-                'mid': nodes[i].id,
-                'isReload': true
-            });
+            var newCreated = this.addNode(instance, $.extend(true, {'isReload': true}, nodes[i]));
             //this.initNode(instance, newCreated);
         }
 
@@ -335,10 +329,10 @@ var jsPmbUtil = {
         if (curZoom < 0.1) {
             return;
         }
-        if (isNext) {//[curZoom, curZoom]
-            self.setContainerZoom(curZoom - 0.1, instance, [perX, perY], $canvas[0]);
+        if (isNext) {//[curZoom, curZoom][perX, perY]
+            self.setContainerZoom(curZoom - 0.1, instance, curZoom, $canvas[0]);
         } else {
-            self.setContainerZoom(curZoom + 0.1, instance, [perX, perY], $canvas[0]);
+            self.setContainerZoom(curZoom + 0.1, instance, curZoom, $canvas[0]);
         }
 
         console.log("after zooming, curZoom is : ", instance.getZoom());
@@ -359,7 +353,7 @@ var jsPmbUtil = {
         var self = this;
 
         //鼠标左键按住 拖动整个画面的这个功能， 不必要。 因为， 有了miniMap
-        $canvas.draggable();
+        //$canvas.draggable();
         //同时， 要给container加上mousemove的事件监听
         
 
@@ -420,8 +414,17 @@ var jsPmbUtil = {
             var curZoom = instance.getZoom();
             var event = eventUtil.getEvent(e),
                 orgPosX = event.pageX,
-                orgPosY = event.pageY;
+                orgPosY = event.pageY,
+                orgMpx = orgPosX - $("#container").offset().left,
+                orgMpy = orgPosY - $("#container").offset().top;
 
+
+
+            var $moveRect = $('<div class="moveRect"></div>');
+            $moveRect.css({
+                'top': orgMpx + "px",
+                'left': orgMpy + "px"
+            }).appendTo($("#canvas"));
             //记下初始元素位置
             //bug: zoom后元素的位置不稳定
             //fix: zoom transformOrigin不正确， 修改为 "left top"即可
@@ -435,63 +438,70 @@ var jsPmbUtil = {
                     curPosX = event2.pageX,
                     curPosY = event2.pageY;
 
-
-                //var moveX = (elePosX + (curPosX - orgPosX)) * curZoom,
-                //    moveY = (elePosY + (curPosY - orgPosY)) * curZoom;
                 var moveX = curPosX - orgPosX,
                     moveY = curPosY - orgPosY,
                     disX = elePosX + moveX,
                     disY = elePosY + moveY;
 
+                $moveRect.css({
+                    'height': Math.abs(moveY) + "px",
+                    'width': Math.abs(moveX) + "px"
+                })
 
-                //console.log("moveX=", moveX,  ", moveY=", moveY);
 
-                /**
-                 * transformOrigin非常重要非常重要非常重要
-                 * */
-                $("#canvas").css({
-                    "transform": "translate(" + disX + "px, " + disY + "px) scale(" + curZoom + ")",
-                    "-webkit-transform": "translate(" + disX + "px, " + disY + "px) scale(" + curZoom + ")",
-                    "-moz-transform": "translate(" + disX + "px, " + disY + "px) scale(" + curZoom + ")",
-                    "-ms-transform": "translate(" + disX + "px, " + disY + "px) scale(" + curZoom + ")",
-                    "transform-origin": "left top",
-                    "-webkit-transform-origin": "left top",
-                    "-moz-transform-origin": "left top",
-                    "-ms-transform-origin": "left top"
-                });
 
-                //miniMap的拖块也要相应位移
-               /* var rectPosX = $("#dragRect").position().left,
-                    rectPosY = $("#dragRect").position().top,
-                    curelePosX = $("#canvas").position().left,
-                    curelePosY = $("#canvas").position().top,*/
+
+                /*(function () {
+                    /!**
+                     * transformOrigin非常重要非常重要非常重要
+                     * *!/
+                    $("#canvas").css({
+                        "transform": "translate(" + disX + "px, " + disY + "px) scale(" + curZoom + ")",
+                        "-webkit-transform": "translate(" + disX + "px, " + disY + "px) scale(" + curZoom + ")",
+                        "-moz-transform": "translate(" + disX + "px, " + disY + "px) scale(" + curZoom + ")",
+                        "-ms-transform": "translate(" + disX + "px, " + disY + "px) scale(" + curZoom + ")",
+                        "transform-origin": "left top",
+                        "-webkit-transform-origin": "left top",
+                        "-moz-transform-origin": "left top",
+                        "-ms-transform-origin": "left top"
+                    });
+
+                    //miniMap的拖块也要相应位移
+                    /!* var rectPosX = $("#dragRect").position().left,
+                     rectPosY = $("#dragRect").position().top,
+                     curelePosX = $("#canvas").position().left,
+                     curelePosY = $("#canvas").position().top,*!/
                     //disXScale = rectPosX + moveX,
                     //disYScale = rectPosY + moveY;
                     //disXScale = disX*scale,
                     //disYScale = disY*scale;
-        /*            disXScale = -curelePosX*scale,
-                    disYScale = -curelePosX*scale;*/
+                    /!*            disXScale = -curelePosX*scale,
+                     disYScale = -curelePosX*scale;*!/
                     //disXScale = rectPosX - moveX*scale,
                     //disYScale = rectPosY - moveY*scale;
 
-                //console.log("disXScale=",disXScale, ", disYScale=", disYScale);
+                    //console.log("disXScale=",disXScale, ", disYScale=", disYScale);
 
-                /*$("#dragRect").css({
-                    "transform": "translate(-" + disXScale + "px, -" + disYScale + "px)",
-                    "-webkit-transform": "translate(-" + disXScale + "px, -" + disYScale + "px)",
-                    "-moz-transform": "translate(-" + disXScale + "px, " + disYScale + "px)",
-                    "-ms-transform": "translate(-" + disXScale + "px, -" + disYScale + "px)",
-                });*/
+                    /!*$("#dragRect").css({
+                     "transform": "translate(-" + disXScale + "px, -" + disYScale + "px)",
+                     "-webkit-transform": "translate(-" + disXScale + "px, -" + disYScale + "px)",
+                     "-moz-transform": "translate(-" + disXScale + "px, " + disYScale + "px)",
+                     "-ms-transform": "translate(-" + disXScale + "px, -" + disYScale + "px)",
+                     });*!/
 
-                /*$("#dragRect").css({
-                    "top": disYScale + "px",
-                    "left": disXScale + "px"
-                })*/
+                    /!*$("#dragRect").css({
+                     "top": disYScale + "px",
+                     "left": disXScale + "px"
+                     })*!/
+
+                })()*/
+
 
             });
 
             $("#container").on('mouseup',function (e) {
                 $("#container").off('mousemove');
+                $moveRect.remove();
             });
         });
 

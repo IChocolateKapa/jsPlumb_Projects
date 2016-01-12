@@ -74,6 +74,7 @@ var jsPmbUtil = {
         /**
          * 给新添加的节点绑定 点击 事件
          * */
+        instance.off(el, "click");
         instance.on(el, "click", function (event) {
             //注意在建立连接完成时也会触发这个事件
             console.log("click node target: ", eventUtil.getTarget(event));
@@ -83,6 +84,7 @@ var jsPmbUtil = {
         /**
          * 给新添加的节点添加绑定事件
          * */
+        instance.off(el, "dblclick");
         instance.on(el, "dblclick", function (event) {
             //注意在建立连接完成时也会触发这个事件
             //console.log(event.target);
@@ -242,7 +244,7 @@ var jsPmbUtil = {
                 'mid': nodes[i].id,
                 'isReload': true
             });
-            this.initNode(instance, newCreated);
+            //this.initNode(instance, newCreated);
         }
 
 

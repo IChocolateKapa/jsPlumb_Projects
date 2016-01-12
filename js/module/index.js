@@ -61,9 +61,9 @@ jsPlumb.ready(function () {
     });*/
 
     //bind connection listener..
-    instance.bind("connection", function (info) {
+    /*instance.bind("connection", function (info) {
         alert("connection info is : ", info);
-    })
+    })*/
 
     // bind right-click listener;
    /* instance.bind("contextmenu", function (conn) {
@@ -117,11 +117,10 @@ jsPlumb.ready(function () {
         //conn是当前的具体连接， 能够获取连接的source target
         console.log("drag Done!");
         console.log("conn ： ", conn);
-        console.log("uuid of conn is : ", conn.getUuids());
+        //console.log("uuid of conn is : ", conn.getUuids());
 
-        var event = window.event;
-        event.preventDefault();
-        event.stopPropagation();
+        eventUtil.preventDefault();
+        eventUtil.stopPropagation();
     });
 
 
@@ -137,8 +136,10 @@ jsPlumb.ready(function () {
             elePosY = $("#canvas").position().top;
 
             console.log("拖动起始点坐标是： (", orgPosX, ", ", orgPosY, ")");
+
         },
         drag: function (event , ui) {
+
             console.log("拖动过程中能不能记起起始点坐标是： (", orgPosX, ", ", orgPosY, ")");
 
             var realPosY = event.pageY,

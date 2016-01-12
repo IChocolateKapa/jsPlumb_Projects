@@ -110,9 +110,9 @@ var jsPmbUtil = {
 
         var offsetLeft = config.left,
             offsetTop = config.top,
-            text = config.text || id.substring(0, 7),
             isReload = config.isReload || false,
-            id = config.mid || jsPlumbUtil.uuid();
+            id = config.mid || jsPlumbUtil.uuid(),
+            text = config.text || id.substring(0, 7);
 
         var d = document.createElement("div");
         d.className = "w";

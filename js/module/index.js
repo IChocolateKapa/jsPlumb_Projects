@@ -49,10 +49,29 @@ jsPlumb.ready(function () {
     instance.bind("click", function (conn) {
         /*删除连接*/
         instance.detach(conn);
-        var event = window.event;
-        event.preventDefault();
-        event.stopPropagation();
+        eventUtil.stopPropagation();
+        eventUtil.preventDefault();
     });
+
+    //bind before drop event
+    /*instance.bind("beforeDrop", function (info) {
+        console.log("beforeDrop, info is: ", info);
+        var ret = confirm("确定建立连接？");
+        return ret;
+    });*/
+
+    //bind connection listener..
+    instance.bind("connection", function (info) {
+        alert("connection info is : ", info);
+    })
+
+    // bind right-click listener;
+   /* instance.bind("contextmenu", function (conn) {
+        /!*删除连接*!/
+        alert("right click on connection: ", conn);
+        eventUtil.stopPropagation();
+        eventUtil.preventDefault();
+    });*/
     /**
      * 双击删除连接， 但是这样会触发双击 增加节点 的事件， 即使阻止冒泡，也没有解决
      * 暂时解决办法是： 给连接绑单击事件， 不与最上层容器的双击事件冒泡冲突
@@ -61,20 +80,18 @@ jsPlumb.ready(function () {
     /*instance.bind("dblclick", function (conn) {
         /!*删除连接*!/
         instance.detach(conn);
-        var event = window.event;
-        event.preventDefault();
-        event.stopPropagation();
+        eventUtil.stopPropagation();
+        eventUtil.preventDefault();
     });*/
 
     // bind beforeDetach interceptor: will be fired when the click handler above calls detach, and the user
     // will be prompted to confirm deletion.
     instance.bind("beforeDetach", function (conn) {
-        /*var ret = confirm("Delete connection?");
-        var event = window.event;
-        event.preventDefault();
-        event.stopPropagation();
-        return ret;*/
-        return true
+        var ret = confirm("Delete connection?");
+        eventUtil.stopPropagation();
+        eventUtil.preventDefault();
+        return ret;
+        //return true
     });
 
 
@@ -100,6 +117,7 @@ jsPlumb.ready(function () {
         //conn是当前的具体连接， 能够获取连接的source target
         console.log("drag Done!");
         console.log("conn ： ", conn);
+        console.log("uuid of conn is : ", conn.getUuids());
 
         var event = window.event;
         event.preventDefault();
@@ -107,7 +125,7 @@ jsPlumb.ready(function () {
     });
 
 
-    jsPlumb.fire("jsPlumbDemoLoaded", instance);
+    //jsPlumb.fire("jsPlumbDemoLoaded", instance);
 
     var orgPosX, orgPosY, elePosX, elePosY;
     $("#dragRect").draggable({

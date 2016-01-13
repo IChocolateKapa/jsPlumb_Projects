@@ -454,32 +454,30 @@ var jsPmbUtil = {
                 });
 
                if (moveX < 0 ) {
-                   console.log("x<0x<0")
                    var rt = $("#container").width() - orgMpx;
                     $moveRect.css({
                         'left': '',
-                        'right': rt + "px",
+                        'right': rt + "px"
                     })
                 }
                 if (moveY < 0) {
-                    console.log("x<0x<0")
                     var bt = $("#container").height() - orgMpy;
                     $moveRect.css({
                         'top': '',
-                        'bottom': bt + "px",
+                        'bottom': bt + "px"
                     })
                 }
                 if (moveX > 0) {
                     $moveRect.css({
                         'right': '',
-                        'left': orgMpx + "px",
+                        'left': orgMpx + "px"
                     })
                 }
 
                 if (moveY > 0) {
                     $moveRect.css({
                         'bottom': '',
-                        'top': orgMpy + "px",
+                        'top': orgMpy + "px"
                     })
                 }
 

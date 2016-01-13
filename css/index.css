@@ -188,6 +188,10 @@ div[class^='main_wrap_']{
     position: absolute;
     z-index: 10000;
     border: 1px solid #2e6da4;
+    background-color: #499aa4;
     height: 1px;
     width: 1px;
+}
+#container.isMove{
+    cursor: crosshair;
 }

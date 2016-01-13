@@ -419,12 +419,14 @@ var jsPmbUtil = {
                 orgMpy = orgPosY - $("#container").offset().top;
 
 
+            $("#container").addClass("isMove");
+            console.log("orgMpx=", orgMpx, ", orgMpy=", orgMpy);
 
             var $moveRect = $('<div class="moveRect"></div>');
             $moveRect.css({
-                'top': orgPosX + "px",
-                'left': orgPosY + "px"
-            }).appendTo($("#canvas"));
+                'top': orgMpy + "px",
+                'left': orgMpx + "px"
+            }).appendTo($("#container"));
             //记下初始元素位置
             //bug: zoom后元素的位置不稳定
             //fix: zoom transformOrigin不正确， 修改为 "left top"即可
@@ -443,27 +445,43 @@ var jsPmbUtil = {
                     disX = elePosX + moveX,
                     disY = elePosY + moveY;
 
-                if (moveX < 0 ) {
+                console.log("moveX=",moveX, ", moveY=", moveY);
+
+
+                $moveRect.css({
+                    'height': Math.abs(moveY) + "px",
+                    'width': Math.abs(moveX) + "px",
+                });
+
+               if (moveX < 0 ) {
+                   console.log("x<0x<0")
+                   var rt = $("#container").width() - orgMpx;
                     $moveRect.css({
-                        'height': Math.abs(moveY) + "px",
-                        'width': Math.abs(moveX) + "px",
-                        'transform': 'rotateX(-90deg)',
-                        'transform-origin': 'bottom'
+                        'left': '',
+                        'right': rt + "px",
                     })
-                } else if (moveY < 0) {
+                }
+                if (moveY < 0) {
+                    console.log("x<0x<0")
+                    var bt = $("#container").height() - orgMpy;
                     $moveRect.css({
-                        'height': Math.abs(moveY) + "px",
-                        'width': Math.abs(moveX) + "px",
-                        'transform': 'rotateY(-90deg)',
-                        'transform-origin': 'right'
+                        'top': '',
+                        'bottom': bt + "px",
                     })
-                } else {
+                }
+                if (moveX > 0) {
                     $moveRect.css({
-                        'height': Math.abs(moveY) + "px",
-                        'width': Math.abs(moveX) + "px",
+                        'right': '',
+                        'left': orgMpx + "px",
                     })
                 }
 
+                if (moveY > 0) {
+                    $moveRect.css({
+                        'bottom': '',
+                        'top': orgMpy + "px",
+                    })
+                }
 
 
 
@@ -518,8 +536,8 @@ var jsPmbUtil = {
             });
 
             $("#container").on('mouseup',function (e) {
-                $("#container").off('mousemove');
-                $moveRect.remove();
+                $("#container").off('mousemove').removeClass("isMove");;
+                //$moveRect.remove();
             });
         });
 

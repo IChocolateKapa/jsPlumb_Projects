@@ -39,7 +39,7 @@ jsPlumb.ready(function () {
 
 
     /**
-     * 鼠标滚轮滚动时进行缩放 --暂时禁掉
+     * 鼠标滚轮滚动时进行缩放 --暂时禁掉缩放功能
      * 在容器中需要取消鼠标滚轮的事件冒泡
      * */
     /*$("#container").on("mousewheel DOMMouseScroll", function (e) {
@@ -99,12 +99,17 @@ jsPlumb.ready(function () {
 
 
     /*双击添加新节点*/
+/*
     jsPlumb.on(container, "dblclick", function (e) {
         jsPmbUtil.addNode(instance, {
             'left': e.offsetX,
             'top': e.offsetY
         });
+        eventUtil.preventDefault(e);
+        eventUtil.stopPropagation(e);
+
     });
+*/
 
 
 

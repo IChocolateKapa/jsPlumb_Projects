@@ -410,138 +410,9 @@ var jsPmbUtil = {
             }
         });
 
-        $("#container").on('mousedown', function (e) {
-            var curZoom = instance.getZoom();
-            var event = eventUtil.getEvent(e),
-                orgPosX = event.pageX,
-                orgPosY = event.pageY,
-                orgMpx = orgPosX - $("#container").offset().left,
-                orgMpy = orgPosY - $("#container").offset().top;
-
-
-            $("#container").addClass("isMove");
-            console.log("orgMpx=", orgMpx, ", orgMpy=", orgMpy);
-
-            var $moveRect = $('<div class="moveRect"></div>');
-            $moveRect.css({
-                'top': orgMpy + "px",
-                'left': orgMpx + "px"
-            }).appendTo($("#container"));
-            //记下初始元素位置
-            //bug: zoom后元素的位置不稳定
-            //fix: zoom transformOrigin不正确， 修改为 "left top"即可
-            var elePosX = $("#canvas").position().left,
-                elePosY = $("#canvas").position().top;
-
-            console.log("onmousedown, elePosX: ",  elePosX, ",  elePosY", elePosY);
-
-            $("#container").on('mousemove', function (e) {
-                var event2 = eventUtil.getEvent(e),
-                    curPosX = event2.pageX,
-                    curPosY = event2.pageY;
-
-                var moveX = curPosX - orgPosX,
-                    moveY = curPosY - orgPosY,
-                    disX = elePosX + moveX,
-                    disY = elePosY + moveY;
-
-                console.log("moveX=",moveX, ", moveY=", moveY);
-
-
-                $moveRect.css({
-                    'height': Math.abs(moveY) + "px",
-                    'width': Math.abs(moveX) + "px",
-                });
-
-               if (moveX < 0 ) {
-                   var rt = $("#container").width() - orgMpx;
-                    $moveRect.css({
-                        'left': '',
-                        'right': rt + "px"
-                    })
-                }
-                if (moveY < 0) {
-                    var bt = $("#container").height() - orgMpy;
-                    $moveRect.css({
-                        'top': '',
-                        'bottom': bt + "px"
-                    })
-                }
-                if (moveX > 0) {
-                    $moveRect.css({
-                        'right': '',
-                        'left': orgMpx + "px"
-                    })
-                }
-
-                if (moveY > 0) {
-                    $moveRect.css({
-                        'bottom': '',
-                        'top': orgMpy + "px"
-                    })
-                }
-
-
-
-
-
-                /*(function () {
-                    /!**
-                     * transformOrigin非常重要非常重要非常重要
-                     * *!/
-                    $("#canvas").css({
-                        "transform": "translate(" + disX + "px, " + disY + "px) scale(" + curZoom + ")",
-                        "-webkit-transform": "translate(" + disX + "px, " + disY + "px) scale(" + curZoom + ")",
-                        "-moz-transform": "translate(" + disX + "px, " + disY + "px) scale(" + curZoom + ")",
-                        "-ms-transform": "translate(" + disX + "px, " + disY + "px) scale(" + curZoom + ")",
-                        "transform-origin": "left top",
-                        "-webkit-transform-origin": "left top",
-                        "-moz-transform-origin": "left top",
-                        "-ms-transform-origin": "left top"
-                    });
-
-                    //miniMap的拖块也要相应位移
-                    /!* var rectPosX = $("#dragRect").position().left,
-                     rectPosY = $("#dragRect").position().top,
-                     curelePosX = $("#canvas").position().left,
-                     curelePosY = $("#canvas").position().top,*!/
-                    //disXScale = rectPosX + moveX,
-                    //disYScale = rectPosY + moveY;
-                    //disXScale = disX*scale,
-                    //disYScale = disY*scale;
-                    /!*            disXScale = -curelePosX*scale,
-                     disYScale = -curelePosX*scale;*!/
-                    //disXScale = rectPosX - moveX*scale,
-                    //disYScale = rectPosY - moveY*scale;
-
-                    //console.log("disXScale=",disXScale, ", disYScale=", disYScale);
-
-                    /!*$("#dragRect").css({
-                     "transform": "translate(-" + disXScale + "px, -" + disYScale + "px)",
-                     "-webkit-transform": "translate(-" + disXScale + "px, -" + disYScale + "px)",
-                     "-moz-transform": "translate(-" + disXScale + "px, " + disYScale + "px)",
-                     "-ms-transform": "translate(-" + disXScale + "px, -" + disYScale + "px)",
-                     });*!/
-
-                    /!*$("#dragRect").css({
-                     "top": disYScale + "px",
-                     "left": disXScale + "px"
-                     })*!/
-
-                })()*/
-
-
-            });
-
-            $("#container").on('mouseup',function (e) {
-                $("#container").off('mousemove').removeClass("isMove");
-                $moveRect.remove();
-            });
-        });
-
         var isDraw = true;
         if (isDraw) {
-            this.drawRectWithMouseMove();
+            this.drawRectWithMouseMove(instance);
         } else {
             this.zoomWithMouseMove(instance);
         }
@@ -590,7 +461,9 @@ var jsPmbUtil = {
     },
 
 
-    drawRectWithMouseMove: function () {
+    drawRectWithMouseMove: function (instance) {
+
+        var self = this;
 
         $("#container").on('mousedown', function (e) {
 
@@ -611,6 +484,9 @@ var jsPmbUtil = {
 
 
             $("#container").on('mousemove', function (e) {
+
+                $(".w").removeClass("highlight");
+
                 var event2 = eventUtil.getEvent(e),
                     curPosX = event2.pageX,
                     curPosY = event2.pageY;
@@ -655,11 +531,83 @@ var jsPmbUtil = {
 
             $("#container").on('mouseup',function (e) {
                 $("#container").off('mousemove').removeClass("isMove");
+
+                console.log("$moveRect.position(): ", $moveRect.position());
+
+                var rectBoundary = self.getRectBoundary($moveRect);
+
+                var nodes = [];
+
+                var nodeList = instance.getSelector(".w");
+                for (var i = 0; i < nodeList.length; i++) {
+                    var nodePosX = nodeList[i].offsetLeft,
+                        nodePosY = nodeList[i].offsetTop,
+                        nodeHeight = nodeList[i].offsetHeight,
+                        nodeWidth = nodeList[i].offsetWidth;
+
+                    if (nodePosX < rectBoundary.top_left.left
+                     || nodePosX > rectBoundary.top_right.left
+                     || nodePosY < rectBoundary.top_left.top
+                     || nodePosY > rectBoundary.bottom_left.top) {
+                        console.log("not in my zone!");
+                    } else {
+                        if ((nodePosX + nodeWidth) < rectBoundary.top_right.left && (nodePosY + nodeHeight) < rectBoundary.bottom_right.top) {
+                            $(nodeList[i]).addClass("highlight");
+                            //再进行后续操作
+                            nodes.push(nodeList[i]);
+                        }
+                    }
+                }
+
+                for (var j = 0; j < nodes.length; j++) {
+                    console.log("nodes[", j, "]=", nodes[j]);
+                }
+
                 $moveRect.remove();
             });
         });
     },
 
+    getRectBoundary: function ($rect) {
+        var tp = $rect.position().top,
+            lt = $rect.position().left,
+            rh = $rect.height(),
+            rw = $rect.width();
+
+        /*左上角点的坐标*/
+        var top_left = {};
+        top_left.left = lt;
+        top_left.top = tp;
+
+        /*右上角点的坐标*/
+        var top_right = {};
+        top_right.left = lt + rw;
+        top_right.top = tp;
+
+        /*左下角点的坐标*/
+        var bottom_left = {};
+        bottom_left.left = lt;
+        bottom_left.top = tp + rh;
+
+        /*右下角点的坐标*/
+        var bottom_right = {};
+        bottom_right.left = lt + rw;
+        bottom_right.top = tp + rh;
+
+        return {
+            'top_left': top_left,
+            'top_right': top_right,
+            'bottom_left': bottom_left,
+            'bottom_right': bottom_right,
+            'height': $rect.height(),
+            'width': $rect.width()
+        }
+    },
+
+    isInContainer: function ($rectOpt, nodeOpt) {
+
+
+    },
 
     zoomWithMouseMove: function (instance) {
 
@@ -744,4 +692,4 @@ var jsPmbUtil = {
 
 
 
-}
+};

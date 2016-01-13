@@ -534,8 +534,8 @@ var jsPmbUtil = {
             });
 
             $("#container").on('mouseup',function (e) {
-                $("#container").off('mousemove').removeClass("isMove");;
-                //$moveRect.remove();
+                $("#container").off('mousemove').removeClass("isMove");
+                $moveRect.remove();
             });
         });
 

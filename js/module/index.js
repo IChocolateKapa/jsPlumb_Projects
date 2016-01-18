@@ -233,6 +233,8 @@ $(function () {
             }
         }
 
+        connectionBasket.empty();
+
         return nextNode;
     }
 
@@ -245,6 +247,7 @@ $(function () {
             total = nodes.length;
 
         var $startNode, $nextNode;
+        $startNode = $(".w.start");
 
         if ($startNode.length == 0) {
             alert("未找到程序运行起点， 请设置起点后再运行！");

@@ -221,7 +221,7 @@ $(function () {
     function letsrun ($startNode) {
         $startNode.addClass("loading");
         var jpStartID = $startNode.attr("id"),
-            nextNode;
+            nextNode = "undefined";
 
         /*取出所有连接， 进行匹配，connection的source的id与jpStart的ID匹配成功的就继续后面*/
         jsPmbUtil.getAllConnections(instance);
@@ -255,29 +255,51 @@ $(function () {
             $nextNode = letsrun($startNode);
 
             setTimeout(function () {
-                $startNode.removeClass("start").removeClass("loading");
-                $nextNode.addClass("start").addClass("loading");
+                $startNode.removeClass("start loading");
+                $nextNode.addClass("start loading");
 
                 $startNode = $(".w.start");
                 $nextNode = letsrun($startNode);
 
-                setTimeout(function () {
-                    $startNode.removeClass("start").removeClass("loading");
-                    $nextNode.addClass("start").addClass("loading");
-
-                    $startNode = $(".w.start");
-                    $nextNode = letsrun($startNode);
-
+                if ($nextNode == "undefined") {
                     setTimeout(function () {
-                        $startNode.removeClass("start").removeClass("loading");
-                        $nextNode.addClass("start").addClass("loading");
+                        $(".w").removeClass("start loading");
+                    }, 500)
+                } else {
+                    setTimeout(function () {
+                        $startNode.removeClass("start loading");
+                        $nextNode.addClass("start loading");
 
-                        setTimeout(function () {
-                            $(".w").removeClass("start").removeClass('loading');
-                        }, 500)
-                    })
+                        $startNode = $(".w.start");
+                        $nextNode = letsrun($startNode);
 
-                }, 500)
+                        if ($nextNode == "undefined") {
+                            setTimeout(function () {
+                                $(".w").removeClass("start loading");
+                            }, 500)
+                        } else {
+                            setTimeout(function () {
+                                $startNode.removeClass("start loading");
+                                $nextNode.addClass("start loading");
+
+                                if ($nextNode == "undefined") {
+                                    setTimeout(function () {
+                                        $(".w").removeClass("start loading");
+                                    }, 500)
+                                } else {
+                                    /*..... and so on... callback hell*/
+                                }
+
+
+                            })
+                        }
+
+
+
+                    }, 500)
+                }
+
+
             }, 500);
         }
 

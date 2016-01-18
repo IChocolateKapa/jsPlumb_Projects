@@ -230,7 +230,6 @@ $(function () {
         for (var j = 0; j < links.length; j++) {
             if (links[j].source == jpStartID) {
                 nextNode = $("#canvas #" + links[j].target);
-                //console.log("targetID: ", links[j].target);
             }
         }
 
@@ -244,32 +243,40 @@ $(function () {
 
         var nodes = nodeBasket.getItems(),
             total = nodes.length;
-/*
-        while (total >= 0) {
 
-
-        }*/
-
-        var $startNode = $(".w.start");
-
-        var $nextNode;
+        var $startNode, $nextNode;
 
         if ($startNode.length == 0) {
             alert("未找到程序运行起点， 请设置起点后再运行！");
             return false;
         } else {
+
+            $startNode = $(".w.start");
             $nextNode = letsrun($startNode);
+
             setTimeout(function () {
                 $startNode.removeClass("start").removeClass("loading");
                 $nextNode.addClass("start").addClass("loading");
-                $startNode = $nextNode;
+
+                $startNode = $(".w.start");
                 $nextNode = letsrun($startNode);
+
                 setTimeout(function () {
                     $startNode.removeClass("start").removeClass("loading");
                     $nextNode.addClass("start").addClass("loading");
+
+                    $startNode = $(".w.start");
+                    $nextNode = letsrun($startNode);
+
                     setTimeout(function () {
-                        $(".w").removeClass("start").removeClass('loading');
-                    }, 500)
+                        $startNode.removeClass("start").removeClass("loading");
+                        $nextNode.addClass("start").addClass("loading");
+
+                        setTimeout(function () {
+                            $(".w").removeClass("start").removeClass('loading');
+                        }, 500)
+                    })
+
                 }, 500)
             }, 500);
         }

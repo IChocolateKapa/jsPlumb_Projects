@@ -94,36 +94,34 @@
 <script>
     $(function () {
 
-        window.localStorage({
-            'demoData': JSON.stringify([
-                {
-                    'demo_1': {
-                        'name': 'demo1',
-                        'age': 25,
-                        'title': 'employee',
-                        'joindate': '2015-12-20'
-                    },
-                    'demo_2': {
-                        'name': 'demo2',
-                        'age': 24,
-                        'title': 'manager',
-                        'joindate': '2014-12-20'
-                    },
-                    'demo_3': {
-                        'name': 'demo3',
-                        'age': 26,
-                        'title': 'sales-lady',
-                        'joindate': '2016-1-10'
-                    },
-                    'demo_4': {
-                        'name': 'demo4',
-                        'age': 30,
-                        'title': 'cto',
-                        'joindate': '2013-1-20'
-                    }
-                }
-            ])
-        })
+        window.localStorage['demoData'] = JSON.stringify({
+            'demo_1': {
+                'name': 'demo1',
+                'age': 25,
+                'title': 'employee',
+                'joindate': '2015-12-20'
+            },
+            'demo_2': {
+                'name': 'demo2',
+                'age': 24,
+                'title': 'manager',
+                'joindate': '2014-12-20'
+            },
+            'demo_3': {
+                'name': 'demo3',
+                'age': 26,
+                'title': 'sales-lady',
+                'joindate': '2016-1-10'
+            },
+            'demo_4': {
+                'name': 'demo4',
+                'age': 30,
+                'title': 'cto',
+                'joindate': '2013-1-20'
+            }
+        });
+
+
         $("#mapPanel").css({
             'width': $("#container").width() * scale + "px",
             'height': $("#container").height() * scale + "px"

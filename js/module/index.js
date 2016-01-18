@@ -2,13 +2,13 @@
  * Created by Echo on 2015/12/28.
  */
 
-
+var instance;
 jsPlumb.ready(function () {
 
     var container = document.getElementById("container");
 
     // setup some defaults for jsPlumb.
-    var instance = jsPmbUtil.getInstance();
+    instance = jsPmbUtil.getInstance();
 
 
     /*拖拽初始化*/
@@ -99,7 +99,6 @@ jsPlumb.ready(function () {
 
 
     /*双击添加新节点*/
-/*
     jsPlumb.on(container, "dblclick", function (e) {
         jsPmbUtil.addNode(instance, {
             'left': e.offsetX,
@@ -109,7 +108,6 @@ jsPlumb.ready(function () {
         eventUtil.stopPropagation(e);
 
     });
-*/
 
 
 
@@ -216,3 +214,69 @@ $(function () {
     })
 })
 
+
+/*运行程序*/
+$(function () {
+
+    function letsrun ($startNode) {
+        $startNode.addClass("loading");
+        var jpStartID = $startNode.attr("id"),
+            nextNode;
+
+        /*取出所有连接， 进行匹配，connection的source的id与jpStart的ID匹配成功的就继续后面*/
+        jsPmbUtil.getAllConnections(instance);
+        var links = connectionBasket.getItems();
+
+        for (var j = 0; j < links.length; j++) {
+            if (links[j].source == jpStartID) {
+                nextNode = $("#canvas #" + links[j].target);
+                //console.log("targetID: ", links[j].target);
+            }
+        }
+
+        return nextNode;
+    }
+
+
+    $("#run").click(function () {
+
+        jsPmbUtil.getAllNodes(instance);
+
+        var nodes = nodeBasket.getItems(),
+            total = nodes.length;
+/*
+        while (total >= 0) {
+
+
+        }*/
+
+        var $startNode = $(".w.start");
+
+        var $nextNode;
+
+        if ($startNode.length == 0) {
+            alert("未找到程序运行起点， 请设置起点后再运行！");
+            return false;
+        } else {
+            $nextNode = letsrun($startNode);
+            setTimeout(function () {
+                $startNode.removeClass("start").removeClass("loading");
+                $nextNode.addClass("start").addClass("loading");
+                $startNode = $nextNode;
+                $nextNode = letsrun($startNode);
+                setTimeout(function () {
+                    $startNode.removeClass("start").removeClass("loading");
+                    $nextNode.addClass("start").addClass("loading");
+                    setTimeout(function () {
+                        $(".w").removeClass("start").removeClass('loading');
+                    }, 500)
+                }, 500)
+            }, 500);
+        }
+
+
+
+
+
+    })
+})

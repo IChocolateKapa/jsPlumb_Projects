@@ -4,7 +4,7 @@
 
 
 //闭包的运用
-var nodeBasket = (function () {
+var  nodeBasket = (function () {
     var privateNodeList = [];
 
     return {

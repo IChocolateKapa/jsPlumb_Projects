@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="css/index.css"/>
     <link rel="stylesheet" href="css/demo.css"/>
     <link rel="stylesheet" href="css/common.css"/>
+    <link rel="stylesheet" href="css/font-awesome.min.css"/>
     <!--<link rel="stylesheet" href="js/lib/jquery-ui-1.11.4/jquery-ui.min.css"/>-->
     <script src="js/lib/jquery/dist/jquery.min.js"></script>
     <script  src="js/lib/jquery-ui-1.11.4/jquery-ui.min.js"></script>
@@ -26,16 +27,28 @@
 <div class="main_wrap">
 
     <div class="main_wrap_left" id="main_wrap_left">
-        <div class="left_block" id="test">
+        <div class="left_block" id="demo_1">
+            <div class="loadPic">
+                <i class="fa fa-spinner fa-pulse"></i>
+            </div>
             <a href="javascript:void(0)"><span class="ep stateName">block1</span></a>
         </div>
-        <div class="left_block">
+        <div class="left_block" id="demo_2">
+            <div class="loadPic">
+                <i class="fa fa-spinner fa-pulse"></i>
+            </div>
             <a href="javascript:void(0)"><span class="ep stateName">block2</span></a>
         </div>
-        <div class="left_block">
+        <div class="left_block" id="demo_3">
+            <div class="loadPic">
+                <i class="fa fa-spinner fa-pulse"></i>
+            </div>
             <a href="javascript:void(0)"><span class="ep stateName">block3</span></a>
         </div>
-        <div class="left_block">
+        <div class="left_block" id="demo_4">
+            <div class="loadPic">
+                <i class="fa fa-spinner fa-pulse"></i>
+            </div>
             <a href="javascript:void(0)"><span class="ep stateName">block4</span></a>
         </div>
     </div>
@@ -55,9 +68,10 @@
 </div>
 
 <div class="footer">
-    <p id="panel"></p>
+    <!--<p id="panel"></p>-->
     <div class="button-group">
         <input type="button" value="save" id="save_gragh" class="btn primary"/>
+        <input type="button" value="run" id="run" class="btn success"/>
     </div>
 </div>
 
@@ -79,6 +93,37 @@
 
 <script>
     $(function () {
+
+        window.localStorage({
+            'demoData': JSON.stringify([
+                {
+                    'demo_1': {
+                        'name': 'demo1',
+                        'age': 25,
+                        'title': 'employee',
+                        'joindate': '2015-12-20'
+                    },
+                    'demo_2': {
+                        'name': 'demo2',
+                        'age': 24,
+                        'title': 'manager',
+                        'joindate': '2014-12-20'
+                    },
+                    'demo_3': {
+                        'name': 'demo3',
+                        'age': 26,
+                        'title': 'sales-lady',
+                        'joindate': '2016-1-10'
+                    },
+                    'demo_4': {
+                        'name': 'demo4',
+                        'age': 30,
+                        'title': 'cto',
+                        'joindate': '2013-1-20'
+                    }
+                }
+            ])
+        })
         $("#mapPanel").css({
             'width': $("#container").width() * scale + "px",
             'height': $("#container").height() * scale + "px"

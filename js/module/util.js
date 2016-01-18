@@ -89,11 +89,16 @@ var jsPmbUtil = {
             //注意在建立连接完成时也会触发这个事件
             //console.log(event.target);
             console.log("dblclick node target: ", eventUtil.getTarget(event));
-            var ret = confirm("确实要删除这个节点吗？");
+            var ret = confirm("要设置这个节点为程序运行起点吗？");
             if (ret) {
-                /*节点删除*/
-                instance.remove(el);
+                /*设置起点*/
+                $(el).addClass("start");
             }
+            //var ret = confirm("确实要删除这个节点吗？");
+            //if (ret) {
+            //    /*节点删除*/
+            //    instance.remove(el);
+            //}
             /*阻止冒泡和默认行为*/
             eventUtil.stopPropagation();
             eventUtil.preventDefault();
@@ -162,8 +167,10 @@ var jsPmbUtil = {
                 elTop = nodeList[i].offsetTop,
                 elLeft = nodeList[i].offsetLeft,
                 id = nodeList[i].id,
-                text = nodeList[i].textContent,
+                text = nodeList[i].innerText,//新建的节点：$(nodeList[0]).find(".stateName").val()
                 elProps = {};
+
+            console.log("text: ", text);
 
             elProps = {
                 width: elWidth,
@@ -243,25 +250,28 @@ var jsPmbUtil = {
 
 
         console.log("lists.length : ", links.length);
-        for (var j = 0; j < links.length; j++) {
-            instance.connect({
-                source: links[j].source,
-                target: links[j].target,
-                //newConnection: true,
-                paintStyle: { strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "transparent", outlineWidth: 4 },
-                endpoint: ["Dot", {radius: 3, cssClass:"small-blue"}],
-                anchor: "Continuous",
-                connector:"Bezier",
-                overlays: [
-                    ["Arrow", {
-                        location: .9,
-                        id: "arrow",
-                        length: 14,
-                        foldback: 0.8
-                    }]
-                ],
-            });
-        }
+        /*batch自动*/
+        instance.batch(function () {
+            for (var j = 0; j < links.length; j++) {
+                instance.connect({
+                    source: links[j].source,
+                    target: links[j].target,
+                    //newConnection: true,
+                    paintStyle: { strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "transparent", outlineWidth: 4 },
+                    endpoint: ["Dot", {radius: 3, cssClass:"small-blue"}],
+                    anchor: "Continuous",
+                    connector:"Bezier",
+                    overlays: [
+                        ["Arrow", {
+                            location: .9,
+                            id: "arrow",
+                            length: 14,
+                            foldback: 0.8
+                        }]
+                    ],
+                });
+            }
+        })
 
 
         nodeBasket.empty();
@@ -410,12 +420,12 @@ var jsPmbUtil = {
             }
         });
 
-        var isDraw = true;
+        /*var isDraw = true;
         if (isDraw) {
             this.drawRectWithMouseMove(instance);
         } else {
             this.zoomWithMouseMove(instance);
-        }
+        }*/
 
     },
     /**

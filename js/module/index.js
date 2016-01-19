@@ -238,77 +238,42 @@ $(function () {
         return nextNode;
     }
 
-
+    var total;
     $("#run").click(function () {
+        total = $(".w").length;
+        run();
+    });
 
-        jsPmbUtil.getAllNodes(instance);
 
-        var nodes = nodeBasket.getItems(),
-            total = nodes.length;
 
-        var $startNode, $nextNode;
+    function callBackRunner (callback) {
         $startNode = $(".w.start");
+        $nextNode = letsrun($startNode);
 
-        if ($startNode.length == 0) {
-            alert("未找到程序运行起点， 请设置起点后再运行！");
-            return false;
+        if ($nextNode == "undefined") {
+            setTimeout(function () {
+                $(".w").removeClass("start loading");
+            }, 500)
         } else {
+
+            $startNode.removeClass("start loading");
+            $nextNode.addClass("start loading");
 
             $startNode = $(".w.start");
             $nextNode = letsrun($startNode);
 
-            setTimeout(function () {
-                $startNode.removeClass("start loading");
-                $nextNode.addClass("start loading");
+            if (total < 0) {
+                return;
+            }
+            callback();
 
-                $startNode = $(".w.start");
-                $nextNode = letsrun($startNode);
-
-                if ($nextNode == "undefined") {
-                    setTimeout(function () {
-                        $(".w").removeClass("start loading");
-                    }, 500)
-                } else {
-                    setTimeout(function () {
-                        $startNode.removeClass("start loading");
-                        $nextNode.addClass("start loading");
-
-                        $startNode = $(".w.start");
-                        $nextNode = letsrun($startNode);
-
-                        if ($nextNode == "undefined") {
-                            setTimeout(function () {
-                                $(".w").removeClass("start loading");
-                            }, 500)
-                        } else {
-                            setTimeout(function () {
-                                $startNode.removeClass("start loading");
-                                $nextNode.addClass("start loading");
-
-                                if ($nextNode == "undefined") {
-                                    setTimeout(function () {
-                                        $(".w").removeClass("start loading");
-                                    }, 500)
-                                } else {
-                                    /*..... and so on... callback hell*/
-                                }
-
-
-                            })
-                        }
-
-
-
-                    }, 500)
-                }
-
-
-            }, 500);
+            total--;
         }
+    }
+    function run () {
+        setTimeout(function () {
+            callBackRunner(run);
+        }, 500);
+    }
 
-
-
-
-
-    })
 })

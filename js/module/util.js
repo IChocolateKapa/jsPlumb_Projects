@@ -48,6 +48,10 @@ var jsPmbUtil = {
          * 要么， 通过filter 属性指定 从这个节点里某个位置拖连接线。当然你可以把这个节点的样式设置的不那么明显
          * */
 
+        var curDomId = $(el).attr("id"),
+            demoData = JSON.parse(window.localStorage["demoData"]),
+            props = demoData[curDomId];
+
         instance.makeSource(el, {
             filter: ".stateName",//从epdiv中作为拖动连接起点
             anchor: "Continuous",
@@ -57,6 +61,7 @@ var jsPmbUtil = {
             extract:{
                 "action":"the-action"
             },
+            parameters: props,
             maxConnections: -1,
             onMaxConnections: function (info, e) {
                 alert("Maximum connections (" + info.maxConnections + ") reached");
@@ -64,9 +69,10 @@ var jsPmbUtil = {
         });
 
         instance.makeTarget(el, {
-            dropOptions: { hoverClass: "dragHover" },
+            dropOptions: {hoverClass: "dragHover"},
             anchor: "Continuous",
             allowLoopback: false,//true
+            parameters: props,
             endpoint: ["Dot", {radius: 3, cssClass:"small-blue"}]
         });
 
@@ -77,7 +83,7 @@ var jsPmbUtil = {
         instance.off(el, "click");
         instance.on(el, "click", function (event) {
             //注意在建立连接完成时也会触发这个事件
-            console.log("click node target: ", eventUtil.getTarget(event));
+            //console.log("click node target: ", eventUtil.getTarget(event));
             eventUtil.stopPropagation(event);
             eventUtil.preventDefault(event);
         });
@@ -401,23 +407,11 @@ var jsPmbUtil = {
             }
         });
 
-        $("#canvas").droppable({
-            hoverClass: "hover-class-test",
-            accept: ".left_block",
-            drop: function(event, ui) {
 
-                var $Item =  ui.draggable;
-                var $itemClone = $Item.clone().addClass("w");
-
-                var t = event.pageY - event.offsetY,
-                    l = event.pageX - event.offsetX - $(".main_wrap_left").width();
-
-                $itemClone.css({"top": t, "left": l}).appendTo($("#canvas"));
-
-                self.initNode(instance, $itemClone);
-            }
-        });
-
+        /**
+         * canvas本应也有drop事件， 但是太小， 事件不会触发
+         * 故只写container的drop事件即可
+         * */
         $("#container").droppable({
             hoverClass: "hover-class-test",
             accept: ".left_block",
@@ -500,12 +494,18 @@ var jsPmbUtil = {
 
             var flag = true;
 
+            var startTime = new Date() * 1;
+
             var event = eventUtil.getEvent(e),
                 orgPosX = event.pageX,
                 orgPosY = event.pageY,
                 orgMpx = orgPosX - $("#container").offset().left,
                 orgMpy = orgPosY - $("#container").offset().top;
 
+            var clickTarget = eventUtil.getTarget(e);
+            if ($(clickTarget).attr('id') !== "container") {
+                return;
+            }
 
             $("#container").addClass("isMove");
 
@@ -564,6 +564,12 @@ var jsPmbUtil = {
 
             $("#container").on('mouseup', function (e) {
 
+                var endTime = new Date() * 1;
+
+                /*if ((endTime - startTime) < 300) {
+                    $moveRect.remove();
+                    return;
+                }*/
 
                 if (flag) {
                     $("#container").off("mousemove").removeClass("isMove");

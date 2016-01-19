@@ -19,12 +19,6 @@ jsPlumb.ready(function () {
      * Task 2: 缩略图的展示 --hard
      * */
 
-
-    /**
-     * Task 3: 右键菜单 --middle
-     * */
-
-
     /**
      * save this gragh 2015.12.30. --
      * */
@@ -49,12 +43,12 @@ jsPlumb.ready(function () {
 
 
     // bind click listener; delete connections on click
-    instance.bind("click", function (conn) {
-        /*删除连接*/
+    /*instance.bind("click", function (conn) {
+        /!*删除连接*!/
         instance.detach(conn);
         eventUtil.stopPropagation();
         eventUtil.preventDefault();
-    });
+    });*/
 
     //bind before drop event
     /*instance.bind("beforeDrop", function (info) {
@@ -79,14 +73,15 @@ jsPlumb.ready(function () {
     /**
      * 双击删除连接， 但是这样会触发双击 增加节点 的事件， 即使阻止冒泡，也没有解决
      * 暂时解决办法是： 给连接绑单击事件， 不与最上层容器的双击事件冒泡冲突
-     * 故下面这段先注释掉
+     * 故下面这段先注释掉，
+     * --2016.01.19由于双击不再增加新节点，故此事件放开
      * */
-    /*instance.bind("dblclick", function (conn) {
-        /!*删除连接*!/
+    instance.bind("dblclick", function (conn) {
+        /*删除连接*/
         instance.detach(conn);
         eventUtil.stopPropagation();
         eventUtil.preventDefault();
-    });*/
+    });
 
     // bind beforeDetach interceptor: will be fired when the click handler above calls detach, and the user
     // will be prompted to confirm deletion.
@@ -122,7 +117,7 @@ jsPlumb.ready(function () {
     instance.bind("connectionDragStop", function (conn) {
         //conn是当前的具体连接， 能够获取连接的source target
         console.log("drag Done!");
-        console.log("conn ： ", conn);
+        console.log("conn parameters： ", conn.getParameter());
 
         eventUtil.preventDefault();
         eventUtil.stopPropagation();

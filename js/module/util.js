@@ -489,7 +489,6 @@ var jsPmbUtil = {
 
         var self = this;
 
-
         $("#container").on('mousedown', function (e) {
 
             var flag = true;
@@ -630,6 +629,7 @@ var jsPmbUtil = {
 
             });
         });
+
     },
 
     getRectBoundary: function ($rect) {

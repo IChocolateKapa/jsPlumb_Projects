@@ -218,27 +218,7 @@ $(function () {
 /*运行程序*/
 $(function () {
 
-    function letsrun ($startNode) {
-        $startNode.addClass("loading");
-        var jpStartID = $startNode.attr("id"),
-            nextNode = "undefined";
-
-        /*取出所有连接， 进行匹配，connection的source的id与jpStart的ID匹配成功的就继续后面*/
-        jsPmbUtil.getAllConnections(instance);
-        var links = connectionBasket.getItems();
-
-        for (var j = 0; j < links.length; j++) {
-            if (links[j].source == jpStartID) {
-                nextNode = $("#canvas #" + links[j].target);
-            }
-        }
-
-        connectionBasket.empty();
-
-        return nextNode;
-    }
-
-    var total;
+    var total, $startNode, $nextNode;
     $("#run").click(function () {
         total = $(".w").length;
         run();
@@ -246,21 +226,25 @@ $(function () {
 
 
 
-    function callBackRunner (callback) {
-        $startNode = $(".w.start");
-        $nextNode = letsrun($startNode);
+    function callBackRunner (callback, $startNode) {
+
+        $nextNode = jsPmbUtil.getNextNode(instance, $startNode);
 
         if ($nextNode == "undefined") {
+
             setTimeout(function () {
                 $(".w").removeClass("start loading");
-            }, 500)
+                $(".prosPanel").hide();
+                alert("程序执行完毕");
+            }, 1000)
+
         } else {
 
             $startNode.removeClass("start loading");
             $nextNode.addClass("start loading");
 
             $startNode = $(".w.start");
-            $nextNode = letsrun($startNode);
+            $nextNode = jsPmbUtil.getNextNode(instance, $startNode);
 
             if (total < 0) {
                 return;
@@ -270,10 +254,40 @@ $(function () {
             total--;
         }
     }
+
+
     function run () {
+
+        $startNode = $(".w.start");
+
+        if ($startNode.length == 0) {
+            alert("请设定程序运行的起点！[双击节点即可选择设置]");
+            return;
+        }
+        $startNode.addClass('loading');
+
+        /*这段是具体针对每个当前节点的操作*/
+        yourOpration($startNode);
+
         setTimeout(function () {
-            callBackRunner(run);
-        }, 500);
+            callBackRunner(run, $startNode);
+        }, 1000);
     }
 
+
+    function yourOpration ($startNode) {
+
+        if ($(".prosPanel").is(":hidden")) {
+            $(".prosPanel").show();
+        }
+        var curDomId = $startNode.attr("id"),
+            demoData = JSON.parse(window.localStorage["demoData"]),
+            props = demoData[curDomId];
+
+        $(".propsContent").empty();
+
+        for (var prop in props) {
+            $(".propsContent").append(prop + " : " + props[prop] + "<br>");
+        }
+    }
 })

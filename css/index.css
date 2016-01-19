@@ -209,7 +209,6 @@ div[class^='main_wrap_']{
     position: absolute;
     left: 50%;
     top: 50%;
-    /*transform: translate(-50%, 0);*/
     transform: translate(-50%, -50%);
     background-color: rgba(255, 255, 255, .5);
     border-radius: 10px;
@@ -218,4 +217,13 @@ div[class^='main_wrap_']{
 }
 .w.loading .loadPic{
     display: block;
+}
+.prosPanel{
+    background-color: salmon;
+    position: absolute;
+    color: white;
+    z-index: 100;
+    padding: 10px;
+    top: 250px;
+    left: 30px;
 }

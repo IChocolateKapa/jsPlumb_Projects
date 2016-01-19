@@ -217,6 +217,26 @@ var jsPmbUtil = {
         return this;
     },
 
+    getNextNode: function (instance, $startNode) {
+        $startNode.addClass("loading");
+        var jpStartID = $startNode.attr("id"),
+            $nextNode = "undefined";
+
+        /*取出所有连接， 进行匹配，connection的source的id与jpStart的ID匹配成功的就继续后面*/
+        this.getAllConnections(instance);
+        var links = connectionBasket.getItems();
+
+        for (var j = 0; j < links.length; j++) {
+            if (links[j].source == jpStartID) {
+                $nextNode = $("#canvas #" + links[j].target);
+            }
+        }
+
+        connectionBasket.empty();
+
+        return $nextNode;
+    },
+
     saveGragh: function (instance) {
         /*获取所有节点  连接*/
         this.getAllNodes(instance)

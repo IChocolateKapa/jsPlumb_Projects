@@ -99,7 +99,7 @@ jsPlumb.ready(function () {
 
 
     /*双击添加新节点*/
-    jsPlumb.on(container, "dblclick", function (e) {
+    /*jsPlumb.on(container, "dblclick", function (e) {
         jsPmbUtil.addNode(instance, {
             'left': e.offsetX,
             'top': e.offsetY
@@ -108,7 +108,7 @@ jsPlumb.ready(function () {
         eventUtil.stopPropagation(e);
 
     });
-
+*/
 
 
 

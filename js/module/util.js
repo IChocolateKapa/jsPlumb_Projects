@@ -440,12 +440,12 @@ var jsPmbUtil = {
             }
         });
 
-        /*var isDraw = true;
+        var isDraw = true;
         if (isDraw) {
             this.drawRectWithMouseMove(instance);
         } else {
             this.zoomWithMouseMove(instance);
-        }*/
+        }
 
     },
     /**
@@ -495,7 +495,10 @@ var jsPmbUtil = {
 
         var self = this;
 
+
         $("#container").on('mousedown', function (e) {
+
+            var flag = true;
 
             var event = eventUtil.getEvent(e),
                 orgPosX = event.pageX,
@@ -559,41 +562,66 @@ var jsPmbUtil = {
                 }
             });
 
-            $("#container").on('mouseup',function (e) {
-                $("#container").off('mousemove').removeClass("isMove");
+            $("#container").on('mouseup', function (e) {
 
-                console.log("$moveRect.position(): ", $moveRect.position());
 
-                var rectBoundary = self.getRectBoundary($moveRect);
+                if (flag) {
+                    $("#container").off("mousemove").removeClass("isMove");
 
-                var nodes = [];
+                    var rectBoundary = self.getRectBoundary($moveRect);
 
-                var nodeList = instance.getSelector(".w");
-                for (var i = 0; i < nodeList.length; i++) {
-                    var nodePosX = nodeList[i].offsetLeft,
-                        nodePosY = nodeList[i].offsetTop,
-                        nodeHeight = nodeList[i].offsetHeight,
-                        nodeWidth = nodeList[i].offsetWidth;
 
-                    if (nodePosX < rectBoundary.top_left.left
-                     || nodePosX > rectBoundary.top_right.left
-                     || nodePosY < rectBoundary.top_left.top
-                     || nodePosY > rectBoundary.bottom_left.top) {
-                        console.log("not in my zone!");
-                    } else {
-                        if ((nodePosX + nodeWidth) < rectBoundary.top_right.left && (nodePosY + nodeHeight) < rectBoundary.bottom_right.top) {
-                            $(nodeList[i]).addClass("highlight");
-                            //再进行后续操作
-                            nodes.push(nodeList[i]);
+                    var nodeList = instance.getSelector(".w"),
+                        nodes = [];
+
+                    for (var i = 0; i < nodeList.length; i++) {
+                        var nodePosX = nodeList[i].offsetLeft,
+                            nodePosY = nodeList[i].offsetTop,
+                            nodeHeight = nodeList[i].offsetHeight,
+                            nodeWidth = nodeList[i].offsetWidth;
+
+                        if (nodePosX < rectBoundary.top_left.left
+                            || nodePosX > rectBoundary.top_right.left
+                            || nodePosY < rectBoundary.top_left.top
+                            || nodePosY > rectBoundary.bottom_left.top) {
+
+                            console.log("not in my zone!");
+
+                        } else {
+                            if ((nodePosX + nodeWidth) < rectBoundary.top_right.left
+                                && (nodePosY + nodeHeight) < rectBoundary.bottom_right.top) {
+
+                                $(nodeList[i]).addClass("highlight");
+                                //再进行后续操作
+                                nodes.push(nodeList[i]);
+                            }
                         }
                     }
+
+
+                    $(".propsContent").empty();
+                    for (var j = 0; j < nodes.length; j++) {
+
+                         /*Echo Added 2016.01.19 -- begin --*/
+                        if ($(".prosPanel").is(":hidden")) {
+                            $(".prosPanel").show();
+                        }
+                        var curDomId = $(nodes[j]).attr("id"),
+                            demoData = JSON.parse(window.localStorage["demoData"]),
+                            props = demoData[curDomId];
+
+                        for (var prop in props) {
+                            $(".propsContent").append("<br>" + prop + " : " + props[prop] + "<br>");
+                        }
+                         /*Echo Added 2016.01.19 -- begin --*/
+
+                    }
+
+                    $moveRect.remove();
+
+                    flag = false;
                 }
 
-                for (var j = 0; j < nodes.length; j++) {
-                    console.log("nodes[", j, "]=", nodes[j]);
-                }
-
-                $moveRect.remove();
             });
         });
     },

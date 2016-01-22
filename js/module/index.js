@@ -2,6 +2,13 @@
  * Created by Echo on 2015/12/28.
  */
 
+var containerID = "container",
+    canvasID = "canvas",
+    $canvas = $("#"+canvasID),
+    $container = $("#"+containerID);
+
+var scale = 0.25;
+
 var instance;
 jsPlumb.ready(function () {
 

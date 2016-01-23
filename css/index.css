@@ -88,6 +88,7 @@ div[class^='main_wrap_']{
     background-color: rgba(198, 64, 13, 0.3);
     position: relative;
     overflow: hidden !important;
+    /*overflow: scroll;*/
 }
 #canvas{
     width: 1px;

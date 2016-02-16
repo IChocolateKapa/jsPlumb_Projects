@@ -21,6 +21,7 @@
     <script src="js/module/index.js"></script>
     <script src="js/lib/common-event.js"></script>
     <script src="js/module/util.js"></script>
+    <script src="js/tool/html2canvas-org.js"></script>
 </head>
 <body>
 
@@ -77,6 +78,7 @@
     <div class="button-group">
         <input type="button" value="save" id="save_gragh" class="btn primary"/>
         <input type="button" value="run" id="run" class="btn success"/>
+        <input type="button" value="run" id="convert" class="btn danger"/>
     </div>
 </div>
 
@@ -130,6 +132,23 @@
         $("#mapPanel").css({
             'width': $("#container").width() * scale + "px",
             'height': $("#container").height() * scale + "px"
+        })
+
+
+        $("#convert").click(function() {
+//            $.load('http://bj.58.com/ershouche/?PGTID=0d100000-0000-14d1-6b7d-c78f1f050762&ClickID=4', function (data) {
+//                html2canvas(data, {
+//                    onrendered: function(canvas) {
+//                        document.body.appendChild(canvas);
+//                    }
+//                });
+//            })
+
+            html2canvas(document.body, {
+                onrendered: function(canvas) {
+                    document.body.appendChild(canvas);
+                }
+            });
         })
     })
 </script>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0, minimal-ui"/>
+    <!-- 禁止数字识自动别为电话号码 -->
+    <meta name="format-detection" content="telephone=no, email=no"/>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="Echo,echochocolatekapa@163.com">
+    <meta name="robots" content="index,follow">
+    <title></title>
+    <script src="js/lib/jquery/dist/jquery.min.js"></script>
+    <script src="js/tool/html2canvas-org.js"></script>
+</head>
+<body>
+
+<button id="convert">click</button>
+
+<div id="caca" style="visibility: hidden;"></div>
+
+
+<script>
+    $("#convert").click(function() {
+
+        $.ajax({
+            url: 'index.html',
+            dataType: 'html',
+            success: function (data) {
+                $("#caca").html(data);
+                html2canvas($("#caca").html(), {
+                    useCORS: true,
+                    onrendered: function(canvas) {
+                        document.body.appendChild(canvas);
+                    }
+                });
+            }
+        })
+
+
+    /*    $("#caca").load('index.html', function (data) {
+            var start_index = data.indexOf('<body>');
+            var end_index = data.indexOf('</body>');
+            var subStr= data.substr(start_index, end_index);
+            console.log('start_index=%d, end_index=%d', start_index, end_index);
+
+            setTimeout(function () {
+                html2canvas(document.getElementById('caca'), {
+                    onrendered: function(canvas) {
+                    document.body.appendChild(canvas);
+//                        document.getElementById('caca').appendChild(canvas);
+                        $("#caca").empty();
+//                        $("#caca").css({
+//                            'opacity': '0'
+//                        });
+                    }
+                });
+            }, 1000)
+
+        })*/
+//        $("#caca").load('http://bj.58.com/ershouche/?PGTID=0d100000-0000-14d1-6b7d-c78f1f050762&ClickID=4', function (data) {
+//            html2canvas(data, {
+//                onrendered: function(canvas) {
+//                    document.body.appendChild(canvas);
+//                }
+//            });
+//        })
+
+    })
+</script>
+</body>
+</html>

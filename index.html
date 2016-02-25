@@ -2,13 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0, minimal-ui"/>
-    <!-- 禁止数字识自动别为电话号码 -->
-    <meta name="format-detection" content="telephone=no, email=no"/>
-    <meta name="keywords" content="">
-    <meta name="description" content="">
-    <meta name="author" content="Echo,echochocolatekapa@163.com">
     <title>Echo一步一步</title>
     <link rel="stylesheet" href="css/index.css"/>
     <link rel="stylesheet" href="css/demo.css"/>
@@ -21,41 +14,71 @@
     <script src="js/module/index.js"></script>
     <script src="js/lib/common-event.js"></script>
     <script src="js/module/util.js"></script>
-    <script src="js/tool/html2canvas-org.js"></script>
+    <script src="js/lib/vue/dist/vue.js"></script>
 </head>
 <body>
-
-<div class="prosPanel">
-    <p>当前节点的属性是：</p>
-    <p class="propsContent"></p>
-</div>
 
 <div class="main_wrap">
 
     <div class="main_wrap_left" id="main_wrap_left">
-        <div class="left_block" id="demo_1">
+        <div class="left_block">
             <div class="loadPic">
                 <i class="fa fa-spinner fa-pulse"></i>
             </div>
-            <a href="javascript:void(0)"><span class="ep stateName">block1</span></a>
+            <a href="javascript:void(0)" class="stateName">源数据</a>
+            <span class="ep top danger"></span>
+            <span class="ep btm success"></span>
+            <input type="text" class="reName"/>
         </div>
-        <div class="left_block" id="demo_2">
+        <div class="left_block">
             <div class="loadPic">
                 <i class="fa fa-spinner fa-pulse"></i>
             </div>
-            <a href="javascript:void(0)"><span class="ep stateName">block2</span></a>
+            <!--<a href="javascript:void(0)"><span class="ep stateName"></span></a>-->
+            <a href="javascript:void(0)" class="stateName">随机采样</a>
+            <span class="ep top danger"></span>
+            <span class="ep btm success"></span>
+            <input type="text" class="reName"/>
         </div>
-        <div class="left_block" id="demo_3">
+        <div class="left_block">
             <div class="loadPic">
                 <i class="fa fa-spinner fa-pulse"></i>
             </div>
-            <a href="javascript:void(0)"><span class="ep stateName">block3</span></a>
+            <!--<a href="javascript:void(0)"><span class="ep stateName">拆分</span></a>-->
+            <a href="javascript:void(0)" class="stateName">拆分</a>
+            <span class="ep top danger"></span>
+            <span class="ep btm success"></span>
+            <input type="text" class="reName"/>
         </div>
-        <div class="left_block" id="demo_4">
+        <div class="left_block">
             <div class="loadPic">
                 <i class="fa fa-spinner fa-pulse"></i>
             </div>
-            <a href="javascript:void(0)"><span class="ep stateName">block4</span></a>
+            <!--<a href="javascript:void(0)"><span class="ep stateName"></span></a>-->
+            <a href="javascript:void(0)" class="stateName">随机森林</a>
+            <span class="ep top danger"></span>
+            <span class="ep btm success"></span>
+            <input type="text" class="reName"/>
+        </div>
+        <div class="left_block">
+            <div class="loadPic">
+                <i class="fa fa-spinner fa-pulse"></i>
+            </div>
+            <!--<a href="javascript:void(0)"><span class="ep stateName">分类算法评估</span></a>-->
+            <a href="javascript:void(0)" class="stateName">分类算法评估</a>
+            <span class="ep top danger"></span>
+            <span class="ep btm success"></span>
+            <input type="text" class="reName"/>
+        </div>
+        <div class="left_block">
+            <div class="loadPic">
+                <i class="fa fa-spinner fa-pulse"></i>
+            </div>
+            <!--<a href="javascript:void(0)"><span class="ep stateName">分类结果输出</span></a>-->
+            <a href="javascript:void(0)" class="stateName">分类结果输出</a>
+            <span class="ep top danger"></span>
+            <span class="ep btm success"></span>
+            <input type="text" class="reName"/>
         </div>
     </div>
 
@@ -73,14 +96,21 @@
 
 </div>
 
-<div class="footer">
-    <!--<p id="panel"></p>-->
+<div class="prosPanel">
+    <p>当前节点的属性是：</p>
+    <p class="propsContent"></p>
+</div>
+
+
+
+<!--<div class="footer">
+    &lt;!&ndash;<p id="panel"></p>&ndash;&gt;
     <div class="button-group">
         <input type="button" value="save" id="save_gragh" class="btn primary"/>
         <input type="button" value="run" id="run" class="btn success"/>
         <input type="button" value="run" id="convert" class="btn danger"/>
     </div>
-</div>
+</div>-->
 
 
 <div class="flyRect">
@@ -135,21 +165,7 @@
         })
 
 
-        $("#convert").click(function() {
-//            $.load('http://bj.58.com/ershouche/?PGTID=0d100000-0000-14d1-6b7d-c78f1f050762&ClickID=4', function (data) {
-//                html2canvas(data, {
-//                    onrendered: function(canvas) {
-//                        document.body.appendChild(canvas);
-//                    }
-//                });
-//            })
 
-            html2canvas(document.body, {
-                onrendered: function(canvas) {
-                    document.body.appendChild(canvas);
-                }
-            });
-        })
     })
 </script>
 </body>

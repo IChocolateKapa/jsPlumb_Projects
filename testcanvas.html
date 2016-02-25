@@ -24,7 +24,7 @@
 <script>
     $("#convert").click(function() {
 
-        $.ajax({
+        /*$.ajax({
             url: 'index.html',
             dataType: 'html',
             success: function (data) {
@@ -33,13 +33,15 @@
                     useCORS: true,
                     onrendered: function(canvas) {
                         document.body.appendChild(canvas);
+                        var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+                        window.location.href=image; // it will save locally
                     }
                 });
             }
-        })
+        })*/
 
 
-    /*    $("#caca").load('index.html', function (data) {
+        $("#caca").load('index.html', function (data) {
             var start_index = data.indexOf('<body>');
             var end_index = data.indexOf('</body>');
             var subStr= data.substr(start_index, end_index);
@@ -48,17 +50,14 @@
             setTimeout(function () {
                 html2canvas(document.getElementById('caca'), {
                     onrendered: function(canvas) {
-                    document.body.appendChild(canvas);
-//                        document.getElementById('caca').appendChild(canvas);
-                        $("#caca").empty();
-//                        $("#caca").css({
-//                            'opacity': '0'
-//                        });
+                        document.body.appendChild(canvas);
+                        var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+                        window.location.href = image; // it will save locally
                     }
                 });
             }, 1000)
 
-        })*/
+        })
 //        $("#caca").load('http://bj.58.com/ershouche/?PGTID=0d100000-0000-14d1-6b7d-c78f1f050762&ClickID=4', function (data) {
 //            html2canvas(data, {
 //                onrendered: function(canvas) {

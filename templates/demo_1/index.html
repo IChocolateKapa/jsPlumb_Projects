@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>例子</title>
+    <script src="../../js/lib/vue/dist/vue.js"></script>
+    <!--<script src="./index.js"></script>-->
+</head>
+<body>
+
+    <div id="demo">
+        {{ fullName }}
+        <br/>
+        <ul>
+            <li  v-on:click="liClick" v-for="food in foodItems">{{food}}</li>
+        </ul>
+    </div>
+
+    <div id="test">
+        <span v-for="n in 10">{{ n }} </span>
+    </div>
+
+
+
+    <script>
+        var vm = new Vue({
+            el: '#demo',
+            components: {
+
+            },
+            created: function () {
+                // `this` 指向 vm 实例
+                console.log('firstName is: ' + this.firstName);
+            },
+            data: {
+                firstName: 'Foo',
+                lastName: 'Bar',
+                foodItems: ['hotdog', 'fries', 'coke']
+            },
+            methods: {
+                liClick: function () {
+                    console.log(this)
+                    alert(' is clicked!');
+                }
+            },
+            computed: {
+                fullName: function () {
+                    return this.firstName + ' ' + this.lastName
+                }
+            }
+        });
+
+
+        vm.$el === document.getElementById('demo') // -> true
+
+        /*必须初始化一个vue实例才能执行*/
+        var vm2 = new Vue({
+            el: '#test'
+        });
+
+        /**/
+
+
+    </script>
+
+</body>
+
+
+</html>

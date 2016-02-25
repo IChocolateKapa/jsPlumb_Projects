@@ -70,13 +70,77 @@
 
 /*没有显示展现连接拖动起点的样式*/
 .ep {
+    position: absolute;
     display: inline-block;
-    padding: 2px;
-    background-color: transparent;
     cursor: pointer;
+    width: 10px;
+    height: 10px;
+    left: 50%;
+    transform: translate(-50%  0);
+    border-radius: 50%;
+    border: 1px solid #ebebeb !important;
+}
+.ep.top{
+    top: 0;
+}
+.ep.btm{
+    bottom: 0;
 }
 
-
+.default{
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
+.primary{
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}
+.success{
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+}
+.info{
+    color: #fff;
+    background-color: #5bc0de;
+    border-color: #46b8da;
+}
+.warning{
+    color: #fff;
+    background-color: #f0ad4e;
+    border-color: #eea236;
+}
+.danger{
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}
+.color-info{
+    color: #5bc0de;
+}
+.color-primary{
+    color: #337ab7;
+}
+.color-success{
+    color: #5cb85c;
+}
+.color-warning{
+    color: #f0ad4e;
+}
+.color-danger{
+    color: #d9534f;
+}
+.color-default{
+    color: #333;
+}
+.color-999{
+    color: #999;
+}
+.color-fff{
+    color: #fff !important;
+}
 .statemachine-demo .jsplumb-endpoint {
     z-index: 3;
 }
@@ -124,4 +188,15 @@ path, .jsplumb-endpoint { cursor:pointer; }
     font-size: 14px;
     border-radius: 5px;
     width: auto;
+}
+.small-blue{
+    position: absolute;
+    top: 5px;
+    border-radius: 50%;
+    width: 5px;
+    height: 5px;
+    background: #3284a7;
+}
+.dragHover{
+    box-shadow: 1px 0 20px 5px orange;
 }

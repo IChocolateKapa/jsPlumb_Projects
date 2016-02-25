@@ -8,7 +8,10 @@ var jsPmbUtil = {
     getInstance: function () {
         var instance = jsPlumb.getInstance({
             Endpoint: ["Dot", {radius: 2}],
-            Connector: "Bezier",//StateMachine
+            //Connector: "Straight",
+            Connector: "Flowchart",
+            //Connector: "StateMachine",
+            //Connector: "Bezier",
             HoverPaintStyle: {strokeStyle: "#1e8151", lineWidth: 2},
             ConnectionOverlays: [
                 [ "Arrow", {
@@ -53,11 +56,10 @@ var jsPmbUtil = {
             props = demoData[curDomId];
 
         instance.makeSource(el, {
-            filter: ".stateName",//从epdiv中作为拖动连接起点
-            anchor: "Continuous",
+            dropOptions: {hoverClass: "dragHover"},
+            filter: ".ep.btm",//从epdiv中作为拖动连接起点
             connectorStyle: {strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "transparent", outlineWidth: 4},
             connectionType:"basic",
-            //endpoint:["Dot", {radius: 3, cssClass:"small-blue"}],
             extract:{
                 "action":"the-action"
             },
@@ -70,10 +72,11 @@ var jsPmbUtil = {
 
         instance.makeTarget(el, {
             dropOptions: {hoverClass: "dragHover"},
-            anchor: "Continuous",
+            anchor: "Top",
+            //anchor: "Continuous",
             allowLoopback: false,//true
             parameters: props,
-            endpoint: ["Dot", {radius: 3, cssClass:"small-blue"}]
+            //endpoint: ["Dot", {radius: 5, cssClass:"small-blue"}]
         });
 
 
@@ -91,15 +94,24 @@ var jsPmbUtil = {
          * 给新添加的节点添加绑定事件
          * */
         instance.off(el, "dblclick");
+        /*双击节点*/
         instance.on(el, "dblclick", function (event) {
             //注意在建立连接完成时也会触发这个事件
             //console.log(event.target);
-            console.log("dblclick node target: ", eventUtil.getTarget(event));
+            $(el).find('.reName').show().focus().val($(el).find('.stateName').html())
+                .keypress(function (event) {
+                    if (event.keyCode == 13) {
+                        $(el).find('.stateName').html(this.value);
+                        $(this).hide();
+                    }
+                }
+            );
+            /*console.log("dblclick node target: ", eventUtil.getTarget(event));
             var ret = confirm("要设置这个节点为程序运行起点吗？");
             if (ret) {
-                /*设置起点*/
+                /!*设置起点*!/
                 $(el).addClass("start");
-            }
+            }*/
             //var ret = confirm("确实要删除这个节点吗？");
             //if (ret) {
             //    /*节点删除*/
@@ -802,5 +814,15 @@ var jsPmbUtil = {
             }
 
         });
+    },
+
+    getNewProName: function () {
+        var curD = new Date();
+        var year = curD.getFullYear(),
+            month = (curD.getMonth() + 1) > 9 ? curD.getMonth() + 1 : '0' + (curD.getMonth() + 1),
+            day = curD.getDate();
+
+
+        return ('我的实验-' + year + month + day);
     }
 };
